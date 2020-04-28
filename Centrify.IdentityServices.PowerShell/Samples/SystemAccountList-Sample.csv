@@ -1,0 +1,3 @@
+System,User,Password,IsManaged,Permissions,Sets
+"TST-SRV01","root","Passw0rd","False","CIS-R-UNIX-UnixAdmins@ocean.net:View","Linux System Accounts"
+"TST-SRV02","root","Passw0rd","False","CIS-R-UNIX-UnixAdmins@ocean.net:View;CIS-R-UNIX-OracleAdmins@ocean.net:View","Linux System Accounts"

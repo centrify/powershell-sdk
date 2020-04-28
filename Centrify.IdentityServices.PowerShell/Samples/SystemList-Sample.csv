@@ -1,0 +1,3 @@
+Name,Fqdn,ComputerClass,Description,ProxyUser,ProxyUserPassword,ProxyUserIsManaged,Permissions,Sets
+"TST-SRV01","tst-srv01.ocean.net","Unix","Added from CSV","cpsproxy","Centr1fy","False","CIS-R-UNIX-UnixAdmins@ocean.net:View","Test Servers,Web Servers"
+"TST-SRV02","tst-srv02.ocean.net","Unix","Added from CSV","cpsproxy","Centr1fy","False","CIS-R-UNIX-UnixAdmins@ocean.net:View;CIS-R-UNIX-OracleAdmins@ocean.net:View","Test Servers,Database Servers"
