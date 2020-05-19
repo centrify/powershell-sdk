@@ -10,9 +10,6 @@
 # EXPORT NESTED FUNCTIONS
 ###########################################################################################
 
-# Load Classes definition
-# & ("{0}\Util\Classes.ps1" -f $PSScriptRoot)
-
 # Explicit Cmdlets export
 $FunctionsList = @( 'Add-CisAccount',
                     'Add-CisCollectionMember',
