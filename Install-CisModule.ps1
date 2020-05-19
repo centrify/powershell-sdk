@@ -120,15 +120,22 @@ if (Test-Path -Path $InstallationPath)
 	$Message += ("[R] - Repare/Upgrade Module by deleting and re-installing all files.`n")
 	$Message += ("[U] - Uninstall and exit.`n")
 	$Message += ("[C] - Cancel and exit.`n")
-	$Choice0 = New-Object System.Management.Automation.Host.ChoiceDescription "&Repare", "Repare Module"
-	$Choice1 = New-Object System.Management.Automation.Host.ChoiceDescription "&Uninstall", "Uninstall and exit"
-	$Choice2 = New-Object System.Management.Automation.Host.ChoiceDescription "&Cancel", "Cancel and exit"
+	$Choice0 = New-Object System.Management.Automation.Host.ChoiceDescription "&Install", "Install Module"
+	$Choice1 = New-Object System.Management.Automation.Host.ChoiceDescription "&Repare", "Repare Module"
+	$Choice2 = New-Object System.Management.Automation.Host.ChoiceDescription "&Uninstall", "Uninstall and exit"
+	$Choice3 = New-Object System.Management.Automation.Host.ChoiceDescription "&Cancel", "Cancel and exit"
 	$Options = [System.Management.Automation.Host.ChoiceDescription[]]($Choice0, $Choice1, $Choice2)
 	# Prompt for choice
 	$Prompt = $Host.UI.PromptForChoice($Title, $Message, $Options, 2) 
 	switch ($Prompt)
 	{
-		0 # Repare
+		0 # Install
+		{
+			Write-Host "Installing Module."
+            # Installing Module
+            Install-Module -Path $InstallationPath
+		}
+		1 # Repare
 		{
 			Write-Host "Reparing/Upgrading Module."
             # Remove Module
@@ -136,14 +143,14 @@ if (Test-Path -Path $InstallationPath)
             # Installing Module
             Install-Module -Path $InstallationPath
 		}
-		1 # Uninstall
+		2 # Uninstall
 		{
 			Write-Host "Uninstalling Module."
             # Remove Module
             Remove-Module -Path $InstallationPath
             Exit
 		}
-		2 # Exit
+		3 # Exit
 		{
 			Write-Host "Operation canceled.`n"
 			Exit
