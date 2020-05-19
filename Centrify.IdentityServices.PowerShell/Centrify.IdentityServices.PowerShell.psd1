@@ -10,12 +10,18 @@
 	Author 				= 'Fabrice Viguier'
 	CompanyName 		= 'Centrify Corporation'
 	Copyright 			= '(c) 2016 CENTRIFY. All rights reserved.'
-	Description 		= 'This PowerShell module is to be used with Centrify Identity Services (both Cloud and on-premise Tenants are supported).'
+	Description 		= 'This PowerShell module is to be used with Centrify Identity Services platform (both SaaS and on-premise Tenants are supported).'
 	GUID 				= '325f94ca-6660-a42b-210d-21ef3488f9ea'
 	ModuleToProcess 	= 'Centrify.IdentityServices.PowerShell.psm1'
-	ModuleVersion 		= '1.11.1010'
+	ModuleVersion 		= '1.12.1905'
     NestedModules       = @(
-                            '.\Util\RestAPIUtil.ps1',
+                            # Loading Utils functions
+                            '.\Util\Core.ps1',
+                            '.\Util\DataVault.ps1',
+                            '.\Util\OAuth.ps1',
+                            '.\Util\Redrock.ps1',
+                            '.\Util\X509Certificates.ps1',
+                            # Loading Module Cmdlets
                             '.\Lib\Add-CisAccount.ps1',
                             '.\Lib\Add-CisCollectionMember.ps1',
                             '.\Lib\Add-CisRoleMember.ps1',
