@@ -8,7 +8,7 @@
 
 <#
 .SYNOPSIS
-This CMDlet retrieves detailed information of the registered PASApp on the system.
+This CMDlet retrieves detailed information of the registered PASApplication on the system.
 
 .DESCRIPTION
 This CMDlet retrieves detailed information of the registered applications on the systems. 
@@ -25,18 +25,18 @@ This CmdLet accepts following optional parameters: [String] Filter
 This CmdLet outputs result upon success. Outputs failure in case of failure.
 
 .EXAMPLE
-C:\PS> Get-PASApp.ps1
+C:\PS> Get-PASApplication.ps1
 This will output all applications on systems.
 
 .EXAMPLE
-C:\PS> Get-PASApp -Filter "OAuth"
+C:\PS> Get-PASApplication -Filter "OAuth"
 This will attempt to provide output of all the objects which have specified filter in it's searched fields.
 
 .EXAMPLE
-C:\PS> Get-PASApp -Filter "Active"
+C:\PS> Get-PASApplication -Filter "Active"
 This will attempt to provide output of all objects which have specified filter in it's searched fields.
 #>
-function global:Get-PASApp
+function global:Get-PASApplication
 {
 	param
 	(
@@ -61,8 +61,8 @@ function global:Get-PASApp
 		# Get current connection to the Centrify Cloud Platform
 		$PASConnection = Centrify.PrivilegedAccessService.PowerShell.Core.GetPASConnection
 
-		# Setup RedrockQuery
-		$Query = "SELECT * FROM Application ORDER BY Name COLLATE NOCASE"
+		# Set RedrockQuery
+		$Query = Centrify.PrivilegedAccessService.PowerShell.Redrock.GetQueryFromFile -Name "GetApplication"
 
 		# Set Arguments
 		$Arguments = @{}

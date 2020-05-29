@@ -34,6 +34,7 @@
                             # WIP - '.\Lib\Export-PASPolicy.ps1',
                             '.\Lib\Get-PASAccount.ps1',
                             '.\Lib\Get-PASAccountCollection.ps1',
+                            '.\Lib\Get-PASApplication.ps1',
                             '.\Lib\Get-PASDatabase.ps1',
                             '.\Lib\Get-PASDomain.ps1',
                             '.\Lib\Get-PASEnrollmentCode.ps1',

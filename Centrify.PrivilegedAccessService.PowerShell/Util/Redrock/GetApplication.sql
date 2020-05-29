@@ -1,0 +1,7 @@
+SELECT
+ * 
+FROM
+ Application 
+ORDER BY
+ Name 
+COLLATE NOCASE
