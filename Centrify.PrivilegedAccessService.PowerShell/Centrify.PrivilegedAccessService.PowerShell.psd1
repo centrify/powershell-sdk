@@ -29,7 +29,7 @@
                             '.\Lib\Checkout-PASPassword.ps1',
                             '.\Lib\Checkout-PASSecret.ps1',
                             '.\Lib\Checkout-PASSshKey.ps1',
-                            '.\Lib\Connect-PASService.ps1',
+                            '.\Lib\Connect-PASPlatform.ps1',
                             '.\Lib\Enroll-PASSystem.ps1',
                             # WIP - '.\Lib\Export-PASPolicy.ps1',
                             '.\Lib\Get-PASAccount.ps1',

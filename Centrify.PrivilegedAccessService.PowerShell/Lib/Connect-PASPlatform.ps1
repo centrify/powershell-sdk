@@ -68,7 +68,7 @@ This will attempt OAuth2 Client authentication using the Service named "Bluecrab
 The following command can be used to encode Service User name and password into a Base64 string.
 $Secret = Centrify.PrivilegedAccessService.PowerShell.OAuth2.ConvertToSecret -ClientID "svc-bcrab@cps.ocean.net" -Password "Centr1fy"
 #>
-function global:Connect-PASService
+function global:Connect-PASPlatform
 {
 	param
 	(

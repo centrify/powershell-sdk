@@ -6,7 +6,7 @@
 # Release      : 11/5/2017
 ###############################################################################################################
 
-function Install-Module
+function Install-PSModule
 {
     param ([System.String]$Path)
 
@@ -39,7 +39,7 @@ function Install-Module
     }
 }
 
-function Remove-Module
+function Remove-PSModule
 {
     param ([System.String]$Path)
 
@@ -61,7 +61,7 @@ function Test-AdminRight
 	}
 }
 
-function Get-PsModulePath
+function Get-PSModulePath
 {
     # Get PSModulePath from Environment
     $PSModulePath = ([System.Environment]::GetEnvironmentVariable("PSModulePath")) -Split ';' | Where-Object { $_ -match "\\Centrify\\PowerShell\\" }
@@ -85,6 +85,7 @@ function Get-PsModulePath
 	    $PSModulePath = "C:\Program Files\Centrify\PowerShell\"
         # Set PSModulePath into Machine Environment
         [System.Environment]::SetEnvironmentVariable("PSModulePath", ("{0};{1}" -f [System.Environment]::GetEnvironmentVariable("PSModulePath"), $PSModulePath), "Machine")
+        Write-Warning "PSModulePath environmnet variable has been updated. Operating System may need to be rebooted for change to be taken into account."  
     }
     else
     {
@@ -116,6 +117,7 @@ if (Test-Path -Path $InstallationPath)
 	# Build Menu
 	$Title = "The Centrify Privileged Access Service Module is already installed."
 	$Message = ("Choose action to perform:`n")
+	$Message += ("[I] - Install Module.`n")
 	$Message += ("[R] - Repare/Upgrade Module by deleting and re-installing all files.`n")
 	$Message += ("[U] - Uninstall and exit.`n")
 	$Message += ("[C] - Cancel and exit.`n")
@@ -132,21 +134,21 @@ if (Test-Path -Path $InstallationPath)
 		{
 			Write-Host "Installing Module."
             # Installing Module
-            Install-Module -Path $InstallationPath
+            Install-PSModule -Path $InstallationPath
 		}
 		1 # Repare
 		{
 			Write-Host "Reparing/Upgrading Module."
             # Remove Module
-            Remove-Module -Path $InstallationPath
+            Remove-PSModule -Path $InstallationPath
             # Installing Module
-            Install-Module -Path $InstallationPath
+            Install-PSModule -Path $InstallationPath
 		}
 		2 # Uninstall
 		{
 			Write-Host "Uninstalling Module."
             # Remove Module
-            Remove-Module -Path $InstallationPath
+            Remove-PSModule -Path $InstallationPath
             Exit
 		}
 		3 # Exit
@@ -160,6 +162,6 @@ else
 {
 	Write-Host "Installing Module."
 	# Installing Module
-    Install-Module -Path $InstallationPath
+    Install-PSModule -Path $InstallationPath
 }
 # Done.
