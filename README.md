@@ -1,4 +1,4 @@
-#PowerShell SDK for Centrify Privileged Access Service
+# PowerShell SDK for Centrify Privileged Access Service
 This SDK is a PowerShell Module for Centrify Privileged Access Service. The Module provides wrapper functions for the REST API as PowerShell Cmdlets that can be used from PowerShell scripts or from an interactive PS Session.
  
 ## Installation
