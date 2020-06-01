@@ -2,11 +2,6 @@
 # Import Secret's Sets from CSV
 #
 # DISCLAIMER   : Sample script using the Centrify.PrivilegedAccessService.PowerShell Module to demonstrate how to add Sets of Secrets into Centrify Privilege Access Service (CPAS) and configure permissions. 
-#
-# Author       : Fabrice Viguier
-# Contact      : fabrice.viguier AT centrify.com
-# Release      : 1/11/2018
-# Version      : Git repository https://bitbucket.org/centrifyps/centrifycloudpowershellmodule
 ###############################################################################################################
 
 param
@@ -61,13 +56,19 @@ if (@(Get-Module | Where-Object {$_.Name -eq $ModuleName}).count -eq 0)
 $Url = "cps.ocean.net"
 $User = "fabrice@ocean.net"
 
+# Connect to Centrify PAS instance using Oauth
+$Url = "tenant.my.centrify.net" # your tenant url
+$Client = "OAuthClient"         # the OAuth2 Client application ID to use
+$Scope = "All"                  # the scope to use for the Oauth token
+$Secret = ""                    # the Base64 string used for the Basic Authentication, can be obtained using: Connect-PASPlatform -EncodeSecret
+
 if ($PASConnection -eq [Void]$Null)
 {
     # Connect to Centrify Identity Services
-    Connect-PASPlatform -Url $Url -User $User
+    Connect-PASPlatform -Url $Url -Client $Client -Scope $Scope -Secret $Secret
     if ($PASConnection -eq [Void]$Null)
     {
-        Throw "Unable to establish connection. Make sure that you are using a Service User not subject to MFA to connect."
+        Throw "Unable to establish connection."
     }
 }
 
