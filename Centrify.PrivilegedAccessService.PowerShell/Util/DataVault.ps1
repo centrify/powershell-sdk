@@ -126,7 +126,7 @@ function Centrify.PrivilegedAccessService.PowerShell.DataVault.UploadSecretFile
 		$Header = @{ "X-CENTRIFY-NATIVE-CLIENT" = "1" }
 
 		# Get File Content
-        $Data = Get-Content -Path $Path
+        $Data = Get-Content -Path $Path -Raw
 	
 		# Debug informations
 		Write-Debug ("Uri= {0}" -f $Uri)
