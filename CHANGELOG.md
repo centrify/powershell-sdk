@@ -1,4 +1,11 @@
 # CHANGELOG
+**1.12.1905**
+
+- Renaming the PS Module to match product name, PS Module is now Centrify.PrivilegedAccessService.PowerShell and refer to Centrify PAS Platform
+- Adding abiltiy to encode and decode Bas64 secrets for OAuth from the Connect-PASPlatform cmdlet
+- Fixing module installation error for first installation (was trying to remove non-existing version)
+- Fixing minor issues with uploading file secret to the Centrify Vault
+
 **1.11.1504**
 
 - Hotfix for Secrets management preventing Export in certain conditions
