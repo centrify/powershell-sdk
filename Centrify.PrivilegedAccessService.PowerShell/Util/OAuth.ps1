@@ -9,10 +9,10 @@
 function Centrify.PrivilegedAccessService.PowerShell.OAuth2.ConvertToSecret
 {
     param(
-        [Parameter(Mandatory=$true, HelpMessage = "Specify the OAuth2 Client ID.")]
-        [System.String]$ClientID,
+        [Parameter(Mandatory=$true, HelpMessage = "Specify the OAuth2 confidential client name.")]
+        [System.String]$Client,
         
-        [Parameter(Mandatory=$true, HelpMessage = "Specify the OAuth2 Client password.")]
+        [Parameter(Mandatory=$true, HelpMessage = "Specify the OAuth2 confidential client password.")]
 		[System.String]$Password		
     )
 
@@ -45,8 +45,8 @@ function Centrify.PrivilegedAccessService.PowerShell.OAuth2.GetBearerToken
         [Parameter(Mandatory=$true, HelpMessage = "Specify the URL to connect to.")]
         [System.String]$Url,
         
-        [Parameter(Mandatory=$true, HelpMessage = "Specify the OAuth2 Service name.")]
-		[System.String]$Service,	
+        [Parameter(Mandatory=$true, HelpMessage = "Specify the OAuth2 Client name.")]
+		[System.String]$Client,	
 
         [Parameter(Mandatory=$true, HelpMessage = "Specify the OAuth2 Scope name.")]
 		[System.String]$Scope,	
@@ -58,7 +58,7 @@ function Centrify.PrivilegedAccessService.PowerShell.OAuth2.GetBearerToken
     # Setup variable for connection
 	$Uri = ("https://{0}/oauth2/token/{1}" -f $Url, $Service)
 	$ContentType = "application/x-www-form-urlencoded" 
-	$Header = @{ "X-CENTRIFY-NATIVE-CLIENT" = "1"; "Authorization" = ("Basic {0}" -f $Secret) }
+	$Header = @{ "X-CENTRIFY-NATIVE-CLIENT" = "True"; "Authorization" = ("Basic {0}" -f $Secret) }
 	Write-Host ("Connecting to Centrify Identity Services (https://{0}) using OAuth2 Client Credentials flow" -f $Url)
 			
     # Format body

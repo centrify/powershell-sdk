@@ -37,13 +37,13 @@ Use Machine Certificate to connect to the Centrify Identity Services.
 .PARAMETER UseUserCertificate
 Use User Certificate to connect to the Centrify Identity Services.
 
-.PARAMETER OAuth2Secret
+.PARAMETER Secret
 Specify the OAuth2 Secret to use for the ClientID.
 
-.PARAMETER OAuth2Service
-Specify the OAuth2 Service Name to use to obtain a Bearer Token.
+.PARAMETER Client
+Specify the OAuth2 Client Application ID to use to obtain a Bearer Token.
 
-.PARAMETER OAuth2Scope
+.PARAMETER Scope
 Specify the OAuth2 Scope Name to claim a Bearer Token for.
 
 .INPUTS
@@ -53,20 +53,20 @@ None. You can't redirect or pipe input to this script.
 This Cmdlet returns a PASConnection object that print information about the opened connection to the Centrify Identity Service.
 
 .EXAMPLE
-C:\PS> Connect-PASService -Url cps.ocean.net -User admin@cps.ocean.net
+C:\PS> Connect-PASPlatform -Url cps.ocean.net -User admin@cps.ocean.net
 This will attempt interactive connection to Url cps.ocean.net using admin@cps.ocean.net user. The user will be prompted to enter credentials following the Centrify Portal policy in effect for this user.
 
 .EXAMPLE
-C:\PS> Connect-PASService -Url cps.ocean.net -UseMachineCertificate -Thumbprint "009D5C993F3ABDE6B5198924CC39B48B4B90C5EE"
+C:\PS> Connect-PASPlatform -Url cps.ocean.net -UseMachineCertificate -Thumbprint "009D5C993F3ABDE6B5198924CC39B48B4B90C5EE"
 This will attempt certificate authentication using a certificate located in the LocalMachine certificate store.
 The following command show how to retrieve the Thumbprint value of a Certificate with "win-centrify" name in the Subject (i.e. machine certificate).
 $Thumbprint = (Get-ChildItem Cert:\LocalMachine\My | Where-Object { $_.Subject -match "win-centrify" }).Thumbprint
 
 .EXAMPLE
-C:\PS> Connect-PASService -Url cps.ocean.net -OAuth2Service "Bluecrab" -OAuth2Scope "All" -OAuth2Secret "c3ZjLWJjcmFiQGNwcy5vY2Vhbi5uZXQ6Q2VudHIxZnk="
+C:\PS> Connect-PASPlatform -Url cps.ocean.net -Client "Bluecrab" -Scope "All" -Secret "c3ZjLWJjcmFiQGNwcy5vY2Vhbi5uZXQ6Q2VudHIxZnk="
 This will attempt OAuth2 Client authentication using the Service named "Bluecrab" with Scope "All". The secret is a Base64 encoded credentials of a Service User allowed to obtain an OAuth2 token for this service.
 The following command can be used to encode Service User name and password into a Base64 string.
-$Secret = Centrify.PrivilegedAccessService.PowerShell.OAuth2.ConvertToSecret -ClientID "svc-bcrab@cps.ocean.net" -Password "Centr1fy"
+$Secret = Centrify.PrivilegedAccessService.PowerShell.OAuth2.ConvertToSecret -Client "svc-bcrab@cps.ocean.net" -Password "Centr1fy"
 #>
 function global:Connect-PASPlatform
 {
@@ -90,14 +90,14 @@ function global:Connect-PASPlatform
 		[Parameter(Mandatory = $false, ParameterSetName = "Certificate", HelpMessage = "Use User Certificate to connect to the Centrify Identity Services.")]
 		[Switch]$UseUserCertificate,
 
-		[Parameter(Mandatory = $true, ParameterSetName = "OAuth2", HelpMessage = "Specify the OAuth2 Secret to use for the ClientID.")]
-        [System.String]$OAuth2Secret,
-
-		[Parameter(Mandatory = $true, ParameterSetName = "OAuth2", HelpMessage = "Specify the OAuth2 Service Name to use to obtain a Bearer Token.")]
-        [System.String]$OAuth2Service,
+		[Parameter(Mandatory = $true, ParameterSetName = "OAuth2", HelpMessage = "Specify the OAuth2 Client ID to use to obtain a Bearer Token.")]
+        [System.String]$Client,
 
 		[Parameter(Mandatory = $true, ParameterSetName = "OAuth2", HelpMessage = "Specify the OAuth2 Scope Name to claim a Bearer Token for.")]
-        [System.String]$OAuth2Scope
+        [System.String]$Scope,
+
+		[Parameter(Mandatory = $true, ParameterSetName = "OAuth2", HelpMessage = "Specify the OAuth2 Secret to use for the ClientID.")]
+        [System.String]$Secret
 	)
 	
 	# Debug preference
@@ -242,7 +242,7 @@ function global:Connect-PASPlatform
 		elseif (-not [System.String]::IsNullOrEmpty($OAuth2Service))
         {
             # Get Bearer Token from OAuth2 Client App
-			$BearerToken = Centrify.PrivilegedAccessService.PowerShell.OAuth2.GetBearerToken -Url $Url -Service $OAuth2Service -Secret $OAuth2Secret -Scope $OAuth2Scope
+			$BearerToken = Centrify.PrivilegedAccessService.PowerShell.OAuth2.GetBearerToken -Url $Url -Client $OAuth2Service -Secret $OAuth2Secret -Scope $OAuth2Scope
 
             # Validate Bearer Token and obtain Session details
 			$Uri = ("https://{0}/Security/Whoami" -f $Url)
