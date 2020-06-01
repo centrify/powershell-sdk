@@ -17,7 +17,7 @@ function Centrify.PrivilegedAccessService.PowerShell.OAuth2.ConvertToSecret
     )
 
     # Combine ClientID and Password then encode authentication string in Base64
-    $AuthenticationString = ("{0}:{1}" -f $ClientID, $Password)
+    $AuthenticationString = ("{0}:{1}" -f $Client, $Password)
     $Secret = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($AuthenticationString))
 
     # Return Base64 encoded secret
@@ -33,7 +33,7 @@ function Centrify.PrivilegedAccessService.PowerShell.OAuth2.ConvertFromSecret
 
     # Decode authentication string from Base64
     $AuthenticationString = [System.Text.Encoding]::ASCII.GetString([System.Convert]::FromBase64String($Secret))
-    $AuthenticationCreds = @{ "ClientID" = $AuthenticationString.Split(':')[0]; "Password" = $AuthenticationString.Split(':')[1]}
+    $AuthenticationCreds = @{ "ConfidentialClient" = $AuthenticationString.Split(':')[0]; "Password" = $AuthenticationString.Split(':')[1]}
 
     # Return Base64 decoded authentication details
     return $AuthenticationCreds

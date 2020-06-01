@@ -65,14 +65,14 @@ $Thumbprint = (Get-ChildItem Cert:\LocalMachine\My | Where-Object { $_.Subject -
 .EXAMPLE
 C:\PS> Connect-PASPlatform -Url cps.ocean.net -Client "Bluecrab" -Scope "All" -Secret "c3ZjLWJjcmFiQGNwcy5vY2Vhbi5uZXQ6Q2VudHIxZnk="
 This will attempt OAuth2 Client authentication using the Service named "Bluecrab" with Scope "All". The secret is a Base64 encoded credentials of a Service User allowed to obtain an OAuth2 token for this service.
-The following command can be used to encode Service User name and password into a Base64 string.
-$Secret = Centrify.PrivilegedAccessService.PowerShell.OAuth2.ConvertToSecret -Client "svc-bcrab@cps.ocean.net" -Password "Centr1fy"
+The following command can be used to encode Service User name and password into a Base64 string:
+C:\PS> Connect-PASPlatform -Url cps.ocean.net -EncodeSecret
 #>
 function global:Connect-PASPlatform
 {
 	param
 	(
-		[Parameter(Mandatory = $true, Position = 0, HelpMessage = "Specify the URL to use for the connection (e.g. oceanlab.my.centrify.com).")]
+		[Parameter(Mandatory = $false, Position = 0, HelpMessage = "Specify the URL to use for the connection (e.g. oceanlab.my.centrify.com).")]
 		[Parameter(ParameterSetName = "Interactive")]
 		[Parameter(ParameterSetName = "Certificate")]
 		[Parameter(ParameterSetName = "OAuth2")]
@@ -97,7 +97,13 @@ function global:Connect-PASPlatform
         [System.String]$Scope,
 
 		[Parameter(Mandatory = $true, ParameterSetName = "OAuth2", HelpMessage = "Specify the OAuth2 Secret to use for the ClientID.")]
-        [System.String]$Secret
+        [System.String]$Secret,
+
+		[Parameter(Mandatory = $false, ParameterSetName = "Base64", HelpMessage = "Encode Base64 Secret to use for OAuth2.")]
+        [Switch]$EncodeSecret,
+
+		[Parameter(Mandatory = $false, ParameterSetName = "Base64", HelpMessage = "Decode Base64 Secret to use for Oauth2.")]
+        [Switch]$DecodeSecret
 	)
 	
 	# Debug preference
@@ -283,9 +289,25 @@ function global:Connect-PASPlatform
                 Throw "Invalid Bearer Token."
             }
         }
+        elseif ($EncodeSecret.IsPresent)
+        {
+            # Get Confidential Client name and password
+            $Client = Read-Host "Confidential Client name"
+            $SecureString = Read-Host "Password" -AsSecureString
+            $Password = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecureString))
+            # Return Base64 encoded secret
+            return ("Secret: {0}" -f (Centrify.PrivilegedAccessService.PowerShell.OAuth2.ConvertToSecret -Client $Client -Password $Password))
+        }		
+        elseif ($DecodeSecret.IsPresent)
+        {
+            # Get Base64 secret to decode
+            $Secret = Read-Host "Secret"
+            # Return Confidential Client name and password
+            return (Centrify.PrivilegedAccessService.PowerShell.OAuth2.ConvertFromSecret -Secret $Secret)
+        }		
         else
 		{
-			# Setup variable for connection
+			# Setup variable for interactive connection using MFA
 			$Uri = ("https://{0}/Security/StartAuthentication" -f $Url)
 			$ContentType = "application/json" 
 			$Header = @{ "X-CENTRIFY-NATIVE-CLIENT" = "1" }
@@ -470,7 +492,7 @@ function global:Connect-PASPlatform
 			    # Unsuccesful connection
 			    Throw $InitialResponseResult.Message
 		    }
-		}				
+		}
 	}
 	catch
 	{
