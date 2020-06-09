@@ -56,7 +56,7 @@ function Centrify.PrivilegedAccessService.PowerShell.OAuth2.GetBearerToken
     )
 
     # Setup variable for connection
-	$Uri = ("https://{0}/oauth2/token/{1}" -f $Url, $Service)
+	$Uri = ("https://{0}/oauth2/token/{1}" -f $Url, $Client)
 	$ContentType = "application/x-www-form-urlencoded" 
 	$Header = @{ "X-CENTRIFY-NATIVE-CLIENT" = "True"; "Authorization" = ("Basic {0}" -f $Secret) }
 	Write-Host ("Connecting to Centrify Identity Services (https://{0}) using OAuth2 Client Credentials flow" -f $Url)

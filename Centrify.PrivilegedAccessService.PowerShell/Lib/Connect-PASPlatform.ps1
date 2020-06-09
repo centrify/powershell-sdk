@@ -245,10 +245,10 @@ function global:Connect-PASPlatform
                 Throw "Machine Certificate authentication error."
             }
 		}
-		elseif (-not [System.String]::IsNullOrEmpty($OAuth2Service))
+		elseif (-not [System.String]::IsNullOrEmpty($Client))
         {
             # Get Bearer Token from OAuth2 Client App
-			$BearerToken = Centrify.PrivilegedAccessService.PowerShell.OAuth2.GetBearerToken -Url $Url -Client $OAuth2Service -Secret $OAuth2Secret -Scope $OAuth2Scope
+			$BearerToken = Centrify.PrivilegedAccessService.PowerShell.OAuth2.GetBearerToken -Url $Url -Client $Client -Secret $Secret -Scope $Scope
 
             # Validate Bearer Token and obtain Session details
 			$Uri = ("https://{0}/Security/Whoami" -f $Url)
@@ -496,6 +496,6 @@ function global:Connect-PASPlatform
 	}
 	catch
 	{
-		Throw $_.Exception   
+		Throw $_.Exception
 	}
 }
