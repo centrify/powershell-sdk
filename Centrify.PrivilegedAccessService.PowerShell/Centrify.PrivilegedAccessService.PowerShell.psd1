@@ -13,7 +13,7 @@
 	Description 		= 'This PowerShell module is to be used with Centrify Privileged Access Service platform (both SaaS and on-premise Centrify PAS tenants are supported).'
 	GUID 				= '325f94ca-6660-a42b-210d-21ef3488f9ea'
 	ModuleToProcess 	= 'Centrify.PrivilegedAccessService.PowerShell.psm1'
-	ModuleVersion 		= '1.12.1905'
+	ModuleVersion 		= '1.12.1106'
     NestedModules       = @(
                             # Loading Utils functions
                             '.\Util\Core.ps1',

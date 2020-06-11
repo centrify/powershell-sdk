@@ -1,4 +1,8 @@
 # CHANGELOG
+**1.12.1106**
+
+- Fixing OAuth issues preventing authentication following module renaming
+
 **1.12.1905**
 
 - Renaming the PS Module to match product name, PS Module is now Centrify.PrivilegedAccessService.PowerShell and refer to Centrify PAS Platform
