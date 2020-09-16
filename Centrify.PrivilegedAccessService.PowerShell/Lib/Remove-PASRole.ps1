@@ -23,7 +23,7 @@ NOTE: Get-PASRole must be used to get the desired role.
 .OUTPUTS
 
 .EXAMPLE
-PS: C:\PS\Remove-PASRole -PASRole (Get-PASRole -Filter "Unused Role")
+PS: C:\PS\Remove-PASRole -PASRole (Get-PASRole -Name "Unused Role")
 This CmdLet delete the Role named "Unused Role".
 #>
 function global:Remove-PASRole
