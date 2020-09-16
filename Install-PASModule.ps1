@@ -92,7 +92,7 @@ function Get-PSModulePath
 	    Write-Host ("Centrify PowerShell Module detected on this system under '{0}'" -f $PSModulePath)
     }
     # Return Path
-    return ("{0}Centrify.PrivilegedAccessService.PowerShell" -f $PSModulePath)
+    return $PSModulePath
 }
 
 ##############
@@ -109,7 +109,9 @@ Write-Host "# Centrify.PrivilegedAccessService.PowerShell Module Installer #"
 Write-Host "################################################################"
 Write-Host
 
-$InstallationPath = Get-PSModulePath
+$PSModulePath = Get-PSModulePath
+$InstallationPath = ("{0}Centrify.PrivilegedAccessService.PowerShell" -f $PSModulePath)
+
 Write-Host ("Centrify Privileged Access Service Module will be using Installation path:`n`t'{0}'" -f $InstallationPath)
 
 if (Test-Path -Path $InstallationPath)
@@ -117,41 +119,36 @@ if (Test-Path -Path $InstallationPath)
 	# Build Menu
 	$Title = "The Centrify Privileged Access Service Module is already installed."
 	$Message = ("Choose action to perform:`n")
-	$Message += ("[I] - Install Module.`n")
 	$Message += ("[R] - Repare/Upgrade Module by deleting and re-installing all files.`n")
 	$Message += ("[U] - Uninstall and exit.`n")
 	$Message += ("[C] - Cancel and exit.`n")
-	$Choice0 = New-Object System.Management.Automation.Host.ChoiceDescription "&Install", "Install Module"
-	$Choice1 = New-Object System.Management.Automation.Host.ChoiceDescription "&Repare", "Repare Module"
-	$Choice2 = New-Object System.Management.Automation.Host.ChoiceDescription "&Uninstall", "Uninstall and exit"
-	$Choice3 = New-Object System.Management.Automation.Host.ChoiceDescription "&Cancel", "Cancel and exit"
+	$Choice0 = New-Object System.Management.Automation.Host.ChoiceDescription "&Repare", "Repare Module"
+	$Choice1 = New-Object System.Management.Automation.Host.ChoiceDescription "&Uninstall", "Uninstall and exit"
+	$Choice2 = New-Object System.Management.Automation.Host.ChoiceDescription "&Cancel", "Cancel and exit"
 	$Options = [System.Management.Automation.Host.ChoiceDescription[]]($Choice0, $Choice1, $Choice2)
 	# Prompt for choice
-	$Prompt = $Host.UI.PromptForChoice($Title, $Message, $Options, 2) 
+	$Prompt = $Host.UI.PromptForChoice($Title, $Message, $Options, 2)
 	switch ($Prompt)
 	{
-		0 # Install
-		{
-			Write-Host "Installing Module."
-            # Installing Module
-            Install-PSModule -Path $InstallationPath
-		}
-		1 # Repare
+		0 # Repare
 		{
 			Write-Host "Reparing/Upgrading Module."
             # Remove Module
             Remove-PSModule -Path $InstallationPath
+            Write-Host ("Centrify PowerShell Module '{0}' deleted" -f $InstallationPath)
             # Installing Module
             Install-PSModule -Path $InstallationPath
+            Write-Host ("Centrify PowerShell Module installed under '{0}'" -f $PSModulePath)
 		}
-		2 # Uninstall
+		1 # Uninstall
 		{
 			Write-Host "Uninstalling Module."
             # Remove Module
             Remove-PSModule -Path $InstallationPath
+            Write-Host ("Centrify PowerShell Module '{0}' deleted" -f $InstallationPath)
             Exit
 		}
-		3 # Exit
+		2 # Exit
 		{
 			Write-Host "Operation canceled.`n"
 			Exit
@@ -163,5 +160,6 @@ else
 	Write-Host "Installing Module."
 	# Installing Module
     Install-PSModule -Path $InstallationPath
+    Write-Host ("Centrify PowerShell Module installed under '{0}'" -f $PSModulePath)
 }
 # Done.
