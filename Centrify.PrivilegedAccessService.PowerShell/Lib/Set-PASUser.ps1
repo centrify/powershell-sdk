@@ -111,9 +111,6 @@ function global:Set-PASUser
 		# Format Json query
 		if ($PASUser.SourceDsType -eq "CDS")
 		{
-		    # Set Json query
-		    $JsonQuery = @{}
-		    
 		    # Get PASUser Attributes and save it as a Centrify Directory Service User
 		    $CDSUser = Centrify.PrivilegedAccessService.PowerShell.Core.GetUserAttributes $PASUser.ID
 		    if ($CDSUser -eq [Void]$null)
@@ -121,89 +118,53 @@ function global:Set-PASUser
 			    Throw "Unable to get PASUser attributes"
 		    }
 
-            # Overriding PASUser LoginName if Parameter is used
+            # Keep PASUser values unless Parameter is given for Update
             if ([System.String]::IsNullOrEmpty($LoginName))
 		    {
-			    $JsonQuery.Add("LoginName", $PASUser.UserName.Split('@')[0])
+			    $LoginName = $PASUser.UserName.Split('@')[0]
 		    }
-            else
-            {
-			    $JsonQuery.Add("LoginName", $LoginName)
-            }
-
-            # Overriding PASUser LoginSuffix if Parameter is used
 		    if ([System.String]::IsNullOrEmpty($LoginSuffix))
 		    {
-			    $JsonQuery.Add("loginsuffixfield-1363-inputEl", $PASUser.UserName.Split('@')[1])
+			    $LoginSuffix = $PASUser.UserName.Split('@')[1]
 		    }
-            else
-            {
-			    $JsonQuery.Add("loginsuffixfield-1363-inputEl", $LoginSuffix)
-            }
-
-            # Overriding PASUser Mail if Parameter is used
 		    if ([System.String]::IsNullOrEmpty($Mail))
 		    {
-			    $JsonQuery.Add("Mail", $CDSUser.Mail)
+			    $Mail = $CDSUser.Mail
 		    }
-            else
-            {
-			    $JsonQuery.Add("Mail", $Mail)
-            }
-
-            # Overriding PASUser DisplayName if Parameter is used
 		    if ([System.String]::IsNullOrEmpty($DisplayName))
 		    {
-			    $JsonQuery.Add("DisplayName", $CDSUser.DisplayName)
+			    $DisplayName = $CDSUser.DisplayName
 		    }
-            else
-            {
-			    $JsonQuery.Add("DisplayName", $DisplayName)
-            }
-
-            # Overriding PASUser Description if Parameter is used
 		    if ([System.String]::IsNullOrEmpty($Description))
 		    {
-			    $JsonQuery.Add("Description", $CDSUser.Description)
+			    $Description = $CDSUser.Description
 		    }
-            else
-            {
-			    $JsonQuery.Add("Description", $Description)
-            }
-
-            # Overriding PASUser OfficeNumber if Parameter is used
 		    if ([System.String]::IsNullOrEmpty($OfficeNumber))
 		    {
-			    $JsonQuery.Add("OfficeNumber", $CDSUser.TelephoneNumber)
+			    $OfficeNumber = $CDSUser.TelephoneNumber
 		    }
-            else
-            {
-			    $JsonQuery.Add("OfficeNumber", $OfficeNumber)
-            }
-
-            # Overriding PASUser HomeNumber if Parameter is used
 		    if ([System.String]::IsNullOrEmpty($HomeNumber))
 		    {
-			    $JsonQuery.Add("HomeNumber", $CDSUser.HomePhone)
+			    $HomeNumber = $CDSUser.HomePhone
 		    }
-            else
-            {
-			    $JsonQuery.Add("HomeNumber", $HomeNumber)
-            }
-
-            # Overriding PASUser MobileNumber if Parameter is used
 		    if ([System.String]::IsNullOrEmpty($MobileNumber))
 		    {
-			    $JsonQuery.Add("MobileNumber", $CDSUser.Mobile)
+			    $MobileNumber = $CDSUser.Mobile
 		    }
-            else
-            {
-			    $JsonQuery.Add("MobileNumber", $MobileNumber)
-            }
 
-            # Set common values 
-            $JsonQuery.Add("ID", $CDSUser.Uuid)		    
-            $JsonQuery.Add("Name", ("{0}@{1}" -f $JsonQuery.LoginName, $JsonQuery.'loginsuffixfield-1363-inputEl'))		    
+		    # Set Json query
+		    $JsonQuery = @{}
+            $JsonQuery.ID = $CDSUser.Uuid
+            $JsonQuery.Name = ("{0}@{1}" -f $LoginName, $LoginSuffix)
+            $JsonQuery.LoginName = $LoginName
+            $JsonQuery.'loginsuffixfield-1363-inputEl' = $LoginSuffix
+            $JsonQuery.LoginName = $LoginName
+            $JsonQuery.Mail = $Mail
+            $JsonQuery.LoginName = $LoginName
+            $JsonQuery.Description = $Description
+            $JsonQuery.OfficeNumber = $OfficeNumber
+            $JsonQuery.HomeNumber = $HomeNumber
+            $JsonQuery.MobileNumber = $MobileNumber
 
 		    # Build Json query
 		    $Json = $JsonQuery | ConvertTo-Json
