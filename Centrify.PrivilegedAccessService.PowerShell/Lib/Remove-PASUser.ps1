@@ -24,7 +24,7 @@ This CmdLet takes the following inputs: [Object] PASUser
 This CmdLet retruns nothing in case of success. Returns error message in case of error.
 
 .EXAMPLE
-PS: C:\PS\Remove-PASUser.ps1 -PASUser (Get-PASUser -Filter "bcrab")
+PS: C:\PS\Remove-PASUser -PASUser (Get-PASUser -Filter "bcrab")
 This CmdLet gets the use "bcrab" and deletes the object.
 #>
 function global:Remove-PASUser
@@ -97,8 +97,12 @@ function global:Remove-PASUser
 	{
 		try
 		{
-			# Format Json query
-			$Json = ("{{`"Users`":[{0}]}}" -f $UserIDList) 
+		    # Set Json query
+		    $JsonQuery = @{}
+		    $JsonQuery.Users = $UserIDList
+
+		    # Build Json query
+		    $Json = $JsonQuery | ConvertTo-Json
 
 			# Debug informations
 			Write-Debug ("Uri= {0}" -f $Uri)

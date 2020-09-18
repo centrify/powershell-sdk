@@ -103,108 +103,76 @@ function global:Set-PASUser
 		# Get current connection to the Centrify Cloud Platform
 		$PASConnection = Centrify.PrivilegedAccessService.PowerShell.Core.GetPASConnection
 
-		# Get PASUser Attributes
-		$CloudUser = Get-PASUserAttributes -PASUser $PASUser
-		if ($CloudUser -eq [Void]$null)
-		{
-			Throw "Unable to get PASUser informations"
-		}
-
-		# Prepare values to set for the User
-		#
-		# {"LoginName":"clouduser",
-		# "loginsuffixfield-1363-inputEl":"oceanlab.my.centrify.com",
-		# "DisplayName":"Cloud User",
-		# "Password":"-1",
-		# "confirmPassword":"-1",
-		# "enableState":false,
-		# "PasswordNeverExpire":true,
-		# "ForcePasswordChangeNext":false,
-		# "InEverybodyRole":true,
-		# "SendEmailInvite":false,
-		# "SendSmsInvite":false,
-		# "Description":"Cloud User for API testing",
-		# "OfficeNumber":"",
-		# "HomeNumber":"",
-		# "MobileNumber":"",
-		# "Picture":"",
-		# "fileName":"",
-		# "ID":"eb4fdde5-3cc3-4145-ab94-dfd83519e5eb",
-		# "state":"None",
-		# "ReportsTo":"Unassigned",
-		# "":null,
-		# "Name":"clouduser@oceanlab.my.centrify.com"}
-		#
-		if ([System.String]::IsNullOrEmpty($LoginName))
-		{
-			$LoginName = $PASUser.UserName.Split('@')[0]
-		}
-		if ([System.String]::IsNullOrEmpty($LoginSuffix))
-		{
-			$LoginSuffix = $PASUser.UserName.Split('@')[1]
-		}
-		if ([System.String]::IsNullOrEmpty($Mail))
-		{
-			$Mail = $CloudUser.Mail
-		}
-		if ([System.String]::IsNullOrEmpty($DisplayName))
-		{
-			$DisplayName = $CloudUser.DisplayName
-		}
-		if ([System.String]::IsNullOrEmpty($Description))
-		{
-			$Description = $CloudUser.Description
-		}
-		if ([System.String]::IsNullOrEmpty($OfficeNumber))
-		{
-			$OfficeNumber = $CloudUser.TelephoneNumber
-		}
-		if ([System.String]::IsNullOrEmpty($HomeNumber))
-		{
-			$HomeNumber = $CloudUser.HomePhone
-		}
-		if ([System.String]::IsNullOrEmpty($MobileNumber))
-		{
-			$MobileNumber = $CloudUser.Mobile
-		}
-		
 		# Setup variable for query
 		$Uri = ("https://{0}/CDirectoryService/ChangeUser" -f $PASConnection.PodFqdn)
 		$ContentType = "application/json" 
 		$Header = @{ "X-CENTRIFY-NATIVE-CLIENT" = "1"; }
 
 		# Format Json query
-		$Json = "{"
 		if ($PASUser.SourceDsType -eq "CDS")
 		{
-			# Modifying a CloudUser
-			$Json += ("`"LoginName`":`"{0}`"," -f $LoginName)
-			$Json += ("`"loginsuffixfield-1363-inputEl`":`"{0}`"," -f $LoginSuffix)
-			$Json += ("`"Mail`":`"{0}`"," -f $Mail)
-			$Json += ("`"DisplayName`":`"{0}`"," -f $DisplayName)
-			#$Json += ("`"Password`":`"-1`",")
-			#$Json += ("`"confirmPassword`":`"-1`",")
-			#$Json += ("`"enableState`":false,")
-			#$Json += ("`"PasswordNeverExpire`":true,")
-			#$Json += ("`"ForcePasswordChangeNext`":false,")
-			#$Json += ("`"InEverybodyRole`":true,")
-			#$Json += ("`"SendEmailInvite`":false,")
-			#$Json += ("`"SendSmsInvite`":false,")
-			$Json += ("`"Description`":`"{0}`"," -f $Description)
-			$Json += ("`"OfficeNumber`":`"{0}`"," -f $OfficeNumber)
-			$Json += ("`"HomeNumber`":`"{0}`"," -f $HomeNumber)
-			$Json += ("`"MobileNumber`":`"{0}`"," -f $MobileNumber)
-			$Json += ("`"ID`":`"{0}`"," -f $CloudUser.Uuid)
-			#$Json += ("`"state`":`"None`",")
-			#$Json += ("`"ReportsTo`":`"Unassigned`",")
-			#$Json += ("`"`":null,")
-			$Json += ("`"Name`":`"{0}@{1}`"" -f $LoginName, $LoginSuffix)
-			$Json += "}"
+		    # Get PASUser Attributes and save it as a Centrify Directory Service User
+		    $CDSUser = Centrify.PrivilegedAccessService.PowerShell.Core.GetUserAttributes $PASUser.ID
+		    if ($CDSUser -eq [Void]$null)
+		    {
+			    Throw "Unable to get PASUser attributes"
+		    }
+
+            # Keep PASUser values unless Parameter is given for Update
+            if ([System.String]::IsNullOrEmpty($LoginName))
+		    {
+			    $LoginName = $PASUser.UserName.Split('@')[0]
+		    }
+		    if ([System.String]::IsNullOrEmpty($LoginSuffix))
+		    {
+			    $LoginSuffix = $PASUser.UserName.Split('@')[1]
+		    }
+		    if ([System.String]::IsNullOrEmpty($Mail))
+		    {
+			    $Mail = $CDSUser.Mail
+		    }
+		    if ([System.String]::IsNullOrEmpty($DisplayName))
+		    {
+			    $DisplayName = $CDSUser.DisplayName
+		    }
+		    if ([System.String]::IsNullOrEmpty($Description))
+		    {
+			    $Description = $CDSUser.Description
+		    }
+		    if ([System.String]::IsNullOrEmpty($OfficeNumber))
+		    {
+			    $OfficeNumber = $CDSUser.TelephoneNumber
+		    }
+		    if ([System.String]::IsNullOrEmpty($HomeNumber))
+		    {
+			    $HomeNumber = $CDSUser.HomePhone
+		    }
+		    if ([System.String]::IsNullOrEmpty($MobileNumber))
+		    {
+			    $MobileNumber = $CDSUser.Mobile
+		    }
+
+		    # Set Json query
+		    $JsonQuery = @{}
+            $JsonQuery.ID = $CDSUser.Uuid
+            $JsonQuery.Name = ("{0}@{1}" -f $LoginName, $LoginSuffix)
+            $JsonQuery.LoginName = $LoginName
+            $JsonQuery.'loginsuffixfield-1363-inputEl' = $LoginSuffix
+            $JsonQuery.LoginName = $LoginName
+            $JsonQuery.Mail = $Mail
+            $JsonQuery.LoginName = $LoginName
+            $JsonQuery.Description = $Description
+            $JsonQuery.OfficeNumber = $OfficeNumber
+            $JsonQuery.HomeNumber = $HomeNumber
+            $JsonQuery.MobileNumber = $MobileNumber
+
+		    # Build Json query
+		    $Json = $JsonQuery | ConvertTo-Json
 		}
 		else
 		{
 			# Can't modify an AD User or LDAP User enabled in the Cloud
-			Throw "This Cmdlet can be use only to modify Users in the Cloud Directory. Any other users should be modified in their respective Directories (AD or LDAP)."
+			Throw "This Cmdlet can be use only to modify Users in the Cloud Directory. Any other users should be modified in their respective Directory Services (AD or LDAP)."
 		}
 		# Debug informations
 		Write-Debug ("Uri= {0}" -f $CipQuery.Uri)
