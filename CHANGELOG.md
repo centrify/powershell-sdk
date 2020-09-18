@@ -1,4 +1,9 @@
 # CHANGELOG
+**1.13.1609**
+
+- Fixing several issues with cross cmdlet calls calling for wrong parameter
+- Updating Json formatting on several old cmdlets
+
 **1.12.1106**
 
 - Fixing OAuth issues preventing authentication following module renaming
