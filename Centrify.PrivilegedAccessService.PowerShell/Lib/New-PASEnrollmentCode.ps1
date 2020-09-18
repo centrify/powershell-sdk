@@ -87,7 +87,7 @@ function global:New-PASEnrollmentCode
 		Write-Debug ("ContentType= {0}" -f $ContentType)
 		
 		# Get Role details
-		$PASRole = Get-PASRole -Filter $Role
+		$PASRole = Get-PASRole -Name $Role
 		if ([System.String]::IsNullOrEmpty($PASRole))
 		{
 			# Role not found
@@ -99,58 +99,42 @@ function global:New-PASEnrollmentCode
 			Throw ("There is more than one Role found with criteria '{0}'." -f $Role)
 		}
 			
-		# Create hashtable of values
-		$hashtable = @{}
+		# Format Json query
+		$JsonQuery = @{}
 		# Enrollment Code
-		$hashtable.Add("OwnerType", "Role")
-		$hashtable.Add("OwnerID", $PASRole.Id)
-		$hashtable.Add("Owner", $PASRole.Name)
-		$hashtable.Add("Description", $Description)
+		$JsonQuery.Add("OwnerType", "Role")
+		$JsonQuery.Add("OwnerID", $PASRole.Id)
+		$JsonQuery.Add("Owner", $PASRole.Name)
+		$JsonQuery.Add("Description", $Description)
 		if ([System.String]::IsNullOrEmpty($ExpiryDate))
 		{
 			# No ExpiryDate given
-			$hashtable.Add("NeverExpire", "true")
+			$JsonQuery.Add("NeverExpire", "true")
 		}
 		else
 		{
 			# Set ExpiryDate - Use short date pattern
-			$hashtable.Add("NeverExpire", "false")
-			$hashtable.Add("ExpiryDate", (Get-Date -Date $ExpiryDate -Format d))
+			$JsonQuery.Add("NeverExpire", "false")
+			$JsonQuery.Add("ExpiryDate", (Get-Date -Date $ExpiryDate -Format d))
 		}
 		if ([System.String]::IsNullOrEmpty($MaxUseCount))
 		{
 			# No MaxUseCount given
-			$hashtable.Add("NoMaxUseCount", "true")
+			$JsonQuery.Add("NoMaxUseCount", "true")
 		}
 		else
 		{
 			# Set MaxUseCount
-			$hashtable.Add("NoMaxUseCount", "false")
-			$hashtable.Add("MaxUseCount", $MaxUseCount)
+			$JsonQuery.Add("NoMaxUseCount", "false")
+			$JsonQuery.Add("MaxUseCount", $MaxUseCount)
 		}
 		if (-not [System.String]::IsNullOrEmpty($IPRange))
 		{
 			# Set IP Range(s)
-			$RangeList = "["
-			for($i = 0; $i -lt $IPRange.Count; $i++)
-			{
-				$RangeList += ("`"{0}`"" -f $IPRange[$i])
-				# Add separator except for last value
-				if ($i -ne ($IPRange.Count -1))
-				{
-					$RangeList += ","
-				}
-			}
-			$RangeList += "]"
+			$JsonQuery.Add("IPRange", $IPRange)
 		}		
-		# Format Json query
-		$Json = "{"
-		foreach ($entry in $hashtable.GetEnumerator())
-		{
-			$Json += ("`"{0}`":`"{1}`"," -f $entry.Name, $entry.Value)
-		}
-		$Json += "}"
-		Write-Debug ("Json= {0}" -f $Json)
+        # Build Json query
+		$Json = $JsonQuery | ConvertTo-Json 
 					
 		# Connect using RestAPI
 		$WebResponse = Invoke-WebRequest -Method Post -Uri $Uri -Body $Json -ContentType $ContentType -Headers $Header -WebSession $PASConnection.Session
