@@ -41,7 +41,7 @@ C:\PS> Get-VaultAccount -VaultSystem *
 Return all accounts of type System accounts (also known as Local Accounts).
 
 .EXAMPLE
-C:\PS> Get-VaultAccount -User "root" -System *
+C:\PS> Get-VaultAccount -User "root" -VaultSystem *
 Return all accounts named 'root' from all systems.
 
 .EXAMPLE
