@@ -28,11 +28,11 @@ This CmdLet accepts as input following optional parameters: [String] Name
 This CmdLet returns results upon success. Returns failure message in case of failure.
 
 .EXAMPLE
-C:\PS> Get-VaultDatabase.ps1
+C:\PS> Get-VaultDatabase
 Outputs list of all databases on system
 
 .EXAMPLE
-C:\PS> Get-VaultDatabase.ps1 -Name "Castle"
+C:\PS> Get-VaultDatabase -Name "Castle"
 Outputs database information of the database specified
 #>
 function global:Get-VaultDatabase
