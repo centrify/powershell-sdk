@@ -30,11 +30,11 @@ This CmdLet accepts one of the following optional inputs: [String] Name
 This CmdLet outputs the following upon success: [Object] PASSystem
 
 .EXAMPLE
-C:\PS> Get-VaultSystem.ps1 
+C:\PS> Get-VaultSystem 
 This cmdlet will output detailed information for all registered PASSystem objects on system
 
 .EXAMPLE
-C:\PS> Get-VaultSystem.ps1 -Name "Windows7Sy1"
+C:\PS> Get-VaultSystem -Name "Windows7Sy1"
 This cmdlet will output detailed information for specified PASSystem
 #>
 function global:Get-VaultSystem
