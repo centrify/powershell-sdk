@@ -28,7 +28,7 @@ This CmdLet takes as input 1 required parameter: [Object] PASAccount
 This Cmdlet returns the result of the operation
 
 .EXAMPLE
-C:\PS> Remove-VaultAccount -Account (Get-VaultAccount -System (Get-VaultSystem -Name "TST-SRV123") -Name "root")
+C:\PS> Remove-VaultAccount -VaultAccount (Get-VaultAccount -VaultSystem (Get-VaultSystem -Name "sarita-test2") -User "abc")
 #>
 function global:Remove-VaultAccount
 {
