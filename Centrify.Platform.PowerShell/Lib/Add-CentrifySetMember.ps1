@@ -50,7 +50,7 @@ C:\PS> Add-CentrifySetMember -PASCollection (Get-VaultSystemSet -Name "Unix Infr
 Adds a system named 'UnixSystem1' the specified PASCollection of object type PASSystemCollection using parameter PASSystem
 
 .EXAMPLE
-C:\PS> Get-VaultAccount -User "Administrator" -System (Get-VaultSystem -Name "WIN-SQLDB01") | Add-CentrifySetMember -PASCollection (Get-VaultAccountSet -Name "Windows Admin Accounts")
+C:\PS> Get-VaultAccount -User "Administrator" -VaultSystem (Get-VaultSystem -Name "WIN-SQLDB01") | Add-CentrifySetMember -PASCollection (Get-VaultAccountSet -Name "Windows Admin Accounts")
 This Cmdlet adds account named 'Administrator' from system 'WIN-SQLDB01' to the specified PASCollection of type PASAccountCollection using input objects from pipeline
 #>
 function global:Add-CentrifySetMember
