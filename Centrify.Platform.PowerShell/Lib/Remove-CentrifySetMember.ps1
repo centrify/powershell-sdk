@@ -57,7 +57,7 @@ C:\PS> Remove-CentrifySetMember -PASCollection (Get-VaultSystemSet -Name "Unix I
 This CmdLet gets specified PASSystemCollection and performs no action.
 
 .EXAMPLE
-C:\PS> Remove-CentrifySetMember -PASCollection (Get-VaultSystemSet -Name "Unix Infrastructure Systems") -System (Get-VaultSystem -Name "UnixSystem1")
+C:\PS> Remove-CentrifySetMember -PASCollection (Get-VaultSystemSet -Name "Unix Infrastructure Systems") -VaultSystem (Get-VaultSystem -Name "UnixSystem1")
 This CmdLet removes "UnixSystem1" system from the specified PASSystemCollection 
 
 .EXAMPLE
