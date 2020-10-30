@@ -37,7 +37,7 @@ One of [PASSystem], [PASDomain] or [PASDatabase]
 [PASAccount]
 
 .EXAMPLE
-C:\PS> Get-VaultAccount -System *
+C:\PS> Get-VaultAccount -VaultSystem *
 Return all accounts of type System accounts (also known as Local Accounts).
 
 .EXAMPLE
