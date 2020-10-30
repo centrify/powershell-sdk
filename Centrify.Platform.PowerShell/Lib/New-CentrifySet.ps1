@@ -42,7 +42,7 @@ This CmdLet accepts the following optional parameters as input: [String] Descrip
 This CmdLet outputs the new PASCollection object created upon success. Outputs failure message upon failure.
 
 .EXAMPLE
-C:\PS> New-CentrifySet -Name "New-CentrifySet -Name "Development-Unix Systems" -CollectionType "Manual" -ObjectType "Systems"
+C:\PS> New-CentrifySet -Name "Development-Unix Systems" -CollectionType "Manual" -ObjectType "Systems"
 Create a new, manual collection labeled "Development-Unix Systems" managing "Systems" object types
 #>
 function global:New-CentrifySet
