@@ -45,7 +45,7 @@ C:\PS> Get-CentrifyEnrollmentCode.ps1
 This CmdLet does nothing
 
 .EXAMPLE
-C:\PS> Get-CentrifyEnrollmentCode.ps1 -Role "Ocean" 
+C:\PS> Get-CentrifyEnrollmentCode -Role "Ocean" 
 This CmdLet gets a PASEnrollmentCode for the specified Role
 #>
 function global:Get-CentrifyEnrollmentCode
