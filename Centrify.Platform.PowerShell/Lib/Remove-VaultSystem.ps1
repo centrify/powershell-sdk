@@ -28,7 +28,7 @@ This CmdLet takes as input 1 required parameter: [Object] PASSystem
 This Cmdlet returns the result of the operation
 
 .EXAMPLE
-C:\PS> Remove-VaultSystem.ps1 -System (Get-VaultSystem -Name "W7System")
+C:\PS> Remove-VaultSystem -VaultSystem (Get-VaultSystem -Name "W7System")
 #>
 function global:Remove-VaultSystem
 {
