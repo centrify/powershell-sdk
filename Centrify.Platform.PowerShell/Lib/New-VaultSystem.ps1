@@ -56,7 +56,7 @@ This CmdLet takes following mandatory parameters:
 Returns the newly created user object on success. Returns failure message on failure.
 
 .EXAMPLE
-C:\PS> New-VaultSystem -Name "bcrabcastle" -Fqdn "castle1.cps.ocean.net"
+C:\PS> New-VaultSystem -Name "bcrabcastle" -ComputerClass "Unix"  -Fqdn "castle1.cps.ocean.net"
 Create a new PASSystem with Name and Fqdn specified
 #>
 function global:New-VaultSystem
