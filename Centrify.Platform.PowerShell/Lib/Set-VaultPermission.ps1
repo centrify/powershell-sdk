@@ -60,7 +60,7 @@ One of [PASAccount], [PASCollection], [PASCollectionMembers], [PASDatabase], [PA
 .OUTPUTS
 
 .EXAMPLE
-C:\PS> Set-VaultPermission -System (Get-VaultSystem -Name "WIN-SQLDB01") -Principal "dwirth@ocean.net" -Right "View,Edit"
+C:\PS> Set-VaultPermission -VaultSystem (Get-VaultSystem -Name "WIN-SQLDB01") -Principal "dwirth@ocean.net" -Right "View,Edit"
 Grant the permission to View and Edit the system named 'WIN-SQLDB01' to AD User 'dwirth' from domain 'ocean.net' using PASSystem parameter
 
 .EXAMPLE
