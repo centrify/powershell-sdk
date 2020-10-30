@@ -27,11 +27,11 @@ CmdLet takes as input optional parameters: [String] Name
 This Cmdlet returns result upon success. Returns error message upon failure.
 
 .EXAMPLE
-C:\PS> Get-VaultDomain.ps1 
+C:\PS> Get-VaultDomain 
 Output all PASDomain domains registered on system
 
 .EXAMPLE
-C:\PS> Get-VaultDomain.ps1 -Name "ocean.net"
+C:\PS> Get-VaultDomain -Name "ocean.net"
 Output domain information for the specified domain
 #>
 function global:Get-VaultDomain
