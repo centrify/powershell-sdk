@@ -46,7 +46,7 @@ One of [PASSystem], [PASAccount], [PASSecret], [PASDomain], [PASDatabase] or [PA
 .OUTPUTS
 
 .EXAMPLE
-C:\PS> Add-CentrifySetMember -PASCollection (Get-VaultSystemSet -Name "Unix Infrastructure Systems") -System (Get-VaultSystem -Name "UnixSystem1")
+C:\PS> Add-CentrifySetMember -PASCollection (Get-VaultSystemSet -Name "Unix Infrastructure Systems") -VaultSystem (Get-VaultSystem -Name "UnixSystem1") 
 Adds a system named 'UnixSystem1' the specified PASCollection of object type PASSystemCollection using parameter PASSystem
 
 .EXAMPLE
