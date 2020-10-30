@@ -45,7 +45,7 @@ C:\PS> Get-VaultAccount -User "root" -System *
 Return all accounts named 'root' from all systems.
 
 .EXAMPLE
-C:\PS> Get-VaultAccount -User "sa" -Database (Get-VaultDatabase -Name "WIN-SQLDB01\AUDIT")
+C:\PS> Get-VaultAccount -User "sa" -VaultDatabase (Get-VaultDatabase -Name "service-now-sql")
 Return account named 'sa' from Database named 'WIN-SQLDB01\AUDIT' using PASDatabase parameter
 
 .EXAMPLE
