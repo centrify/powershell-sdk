@@ -110,7 +110,7 @@ The following parameters are optional:
 This Cmdlet returns the [Object] PASSystem upon success. Returns error message upon failure.
 
 .EXAMPLE
-C:\PS> Set-VaultSystem -System (Get-VaultSystem -Name "Windows7") -Name "Windows7Sys1"
+C:\PS> Set-VaultSystem -VaultSystem (Get-VaultSystem -Name "Windows7") -Name "Windows7Sys1"
 This CmdLet gets the specified system and updates the name.
 #>
 function global:Set-VaultSystem
