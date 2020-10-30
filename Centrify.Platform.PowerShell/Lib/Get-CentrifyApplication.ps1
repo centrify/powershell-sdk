@@ -29,7 +29,7 @@ This CmdLet accepts following optional parameters: [String] Filter
 This CmdLet outputs result upon success. Outputs failure in case of failure.
 
 .EXAMPLE
-C:\PS> Get-CentrifyApplication.ps1
+C:\PS> Get-CentrifyApplication
 This will output all applications on systems.
 
 .EXAMPLE
