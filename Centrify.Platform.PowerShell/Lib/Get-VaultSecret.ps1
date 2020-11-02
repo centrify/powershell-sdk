@@ -28,8 +28,8 @@ C:\PS>  $VaultSecret = Get-VaultSecret
 Retrieves all secrets on system and places in $VaultSecret object
 
 .EXAMPLE
-C:\PS>  $VaultSecret = Get-VaultSecret -Name "Secret"
-Retrieves detailed secret on machine with Name "Secret"
+C:\PS>  $VaultSecret = Get-VaultSecret -Filter "Ocean" 
+Retrieves detailed secret on machine with Name "Ocean"
 
 .EXAMPLE
 C:\PS>  $VaultSecret = Get-VaultSecret -Filter "Text"
