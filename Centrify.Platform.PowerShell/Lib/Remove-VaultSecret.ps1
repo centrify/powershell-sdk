@@ -28,7 +28,7 @@ This Cmdlet takes the following mandatory inputs: [Object] PASSecret
 This Cmdlet returns nothing in case of success. Returns error message in case of failure.
 
 .EXAMPLE
-PS: C:\PS\Remove-VaultSecret.ps1 -PASSecret (Get-VaultSecret -Name "Secret")
+PS: C:\PS\Remove-VaultSecret -VaultSecret (Get-VaultSecret -Filter "Secret")
 This CmdLet removes the PASSecret named 'Secret' from the system
 #>
 function global:Remove-VaultSecret
