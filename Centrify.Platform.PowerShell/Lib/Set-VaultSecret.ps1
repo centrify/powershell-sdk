@@ -40,7 +40,7 @@ The following arguments are required: PASecret
 The following parametere are option: FilePath, Name, Description, Password
 
 .EXAMPLE
-C:\PS> Set-VaultSecret.ps1 -PASSecret (Get-VaultSecret -Name "Secret")  -Name "Updated Secrets Name" -Description "New Secrets file"
+C:\PS> Set-VaultSecret -VaultSecret (Get-VaultSecret -filter "Secret")  -Name "Updated Secrets Name" -Description "New Secrets file"
 #>
 function global:Set-VaultSecret
 {
