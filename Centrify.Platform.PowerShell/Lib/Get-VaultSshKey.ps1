@@ -24,11 +24,11 @@ Optional parameter to specify the Name of the SSH key to retrieve
 Optional parameter to specify the Filter to use to search for Secret(s). Searches the following fields: "Name", "KeyType", "KeyFormat")
 
 .EXAMPLE
-C:\PS>  $PASSshKey = Get-VaultSshKey 
+C:\PS>  Get-VaultSshKey 
 List all SSH keys from vault and places in $PASSshKey object
 
 .EXAMPLE
-C:\PS>  $PASSshKey = Get-VaultSshKey -Name "root@server123"
+C:\PS> Get-VaultSshKey -Filter "root@server123"
 List SSH key from vault with Name "root@server123"
 #>
 function global:Get-VaultSshKey
