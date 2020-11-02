@@ -24,15 +24,15 @@ Optional parameter to specify the Name of the Secret to retrieve
 Optional parameter to specify the Filter to use to search for Secret(s). Searches the following fields: "SecretName", "Type", "SecretFileName")
 
 .EXAMPLE
-C:\PS>  $VaultSecret = Get-VaultSecret 
+C:\PS> Get-VaultSecret 
 Retrieves all secrets on system and places in $VaultSecret object
 
 .EXAMPLE
-C:\PS>  $VaultSecret = Get-VaultSecret -Filter "Ocean" 
+C:\PS> Get-VaultSecret -Filter "Ocean" 
 Retrieves detailed secret on machine with Name "Ocean"
 
 .EXAMPLE
-C:\PS>  $VaultSecret = Get-VaultSecret -Filter "Text"
+C:\PS> Get-VaultSecret -Filter "Text"
 Retrieves detailed secret(s) on system that contain "text" in "SecretName", "Type", or "SecretFileName"
 #>
 function global:Get-VaultSecret
