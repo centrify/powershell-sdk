@@ -29,9 +29,12 @@ Optional [String] file that contains the query to execute.
 
 .EXAMPLE
  C:\PS>Run-RedrockQuery -Query "SELECT * FROM (Select * FROM VaultDomain)
- This CMDlet execute a Redrock Query and return results.
+ This CMDlet execute a Redrock Query from a string and return result .
 
 .EXAMPLE
+C:\PS> Run-RedrockQuery -SqlFile C:\Users\Spandey\Desktop\query.sql.txt
+This CMDlet execute a Redrock Query from a file and return result .
+
 #>
 function global:Run-RedrockQuery
 {
