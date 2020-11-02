@@ -29,11 +29,11 @@ Mandatory password value to update to.
 .OUTPUTS
 
 .EXAMPLE
-C:\PS> Set-VaultPassword -Account (Get-VaultAccount -User root -System (Get-VaultSystem -Name "engcen6")) -Password "NewPassw0rd!"
+C:\PS> Set-VaultPassword -VaultAccount (Get-VaultAccount -User root -VaultSystem (Get-VaultSystem -Name "engcen6")) -Password "NewPassw0rd!"
 Update password for vaulted account 'root' on system named 'engcen6' using parameter PASAccount
 
 .EXAMPLE
-C:\PS> Get-VaultAccount -User root -System (Get-VaultSystem -Name "engcen6") | Set-VaultPassword -Password "NewPassw0rd!"
+C:\PS> Get-VaultAccount -User root -VaultSystem (Get-VaultSystem -Name "engcen6") | Set-VaultPassword -Password "NewPassw0rd!"
 Update password for vaulted account 'root' on system named 'engcen6' using input object from pipe
 #>
 function global:Set-VaultPassword
