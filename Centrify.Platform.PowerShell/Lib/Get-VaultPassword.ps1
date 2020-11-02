@@ -33,11 +33,11 @@ Optional Description to use for this checkout.
 [PASCheckout]
 
 .EXAMPLE
-C:\PS> Get-VaultPassword -Account (Get-VaultAccount -User "root" -System (Get-VaultSystem -Name "LNX-APP02"))
+C:\PS> Get-VaultPassword -VaultAccount (Get-VaultAccount -User "root" -VaultSystem (Get-VaultSystem -Name "LNX-APP02"))
 Checkout the 'root' password on system 'LNX-APP02' using the PASAccount parameter
 
 .EXAMPLE
-C:\PS> Get-VaultAccount -User "oracle" -System (Get-VaultSystem -Name "LNX-ORADB01") | Get-VaultPassword -Lifetime 30 -Description "Need to patch Oracle database"
+C:\PS> Get-VaultAccount -User "oracle" -VaultSystem (Get-VaultSystem -Name "LNX-ORADB01") | Get-VaultPassword -Lifetime 30 -Description "Need to patch Oracle database"
 Checkout the 'oracle' password on system 'LNX-ORADB01' using the input object from pipeline and specifying a custom lifetime and a description giving the reason for the checkout.
 #>
 function global:Get-VaultPassword
