@@ -27,12 +27,8 @@ Mandatory parameter to specify the private key to store in PEM format
 Optional parameter to specify the key passphrase
 
 .EXAMPLE
-C:\PS>  $PASSshKey = Get-VaultSshKey 
-List all SSH keys from vault and places in $PASSshKey object
-
-.EXAMPLE
-C:\PS>  $PASSshKey = Get-VaultSshKey -Name "root@server123"
-List SSH key from vault with Name "root@server123"
+C:\PS>  New-VaultSshKey -Name "root@server123" -PrivateKey C:\Users\Spandey\Desktop\sshkey@30.pem 
+This CMDlet store a new SSH key name "root@server123" to the vault
 #>
 function global:New-VaultSshKey
 {
