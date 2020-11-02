@@ -26,6 +26,8 @@ Mandatory PASAccount.
 .OUTPUTS
 
 .EXAMPLE
+C:\PS>  Rotate-VaultPassword -VaultAccount (Get-VaultAccount -User lapr_test -VaultSystem (Get-VaultSystem -Name TEST_UNIX)) 
+
 #>
 function global:Rotate-VaultPassword
 {
