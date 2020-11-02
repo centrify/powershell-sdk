@@ -28,6 +28,8 @@ Optional [String] file that contains the query to execute.
 .OUTPUTS
 
 .EXAMPLE
+ C:\PS>Run-RedrockQuery -Query "SELECT * FROM (Select * FROM VaultDomain)
+ This CMDlet execute a Redrock Query and return results.
 
 .EXAMPLE
 #>
