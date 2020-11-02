@@ -28,7 +28,7 @@ This Cmdlet takes the following mandatory inputs: [Object] PASSshKey
 This Cmdlet returns nothing in case of success. Returns error message in case of failure.
 
 .EXAMPLE
-PS: C:\PS\Remove-VaultSshKey -PASSshKey (Get-VaultSshKey -Name "root@server123")
+PS: C:\PS\Remove-VaultSshKey -PASSshKey (Get-VaultSshKey -Filter "root@server123")  
 This CmdLet removes the PASSshKey named 'Secret' from the vault
 #>
 function global:Remove-VaultSshKey
