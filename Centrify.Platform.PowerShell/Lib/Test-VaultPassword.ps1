@@ -28,11 +28,11 @@ Mandatory PASAccount object
 [System.Object]
 
 .EXAMPLE
-C:\PS> Test-VaultPassword -Account (Get-VaultAccount -User root -System (Get-VaultSystem -Name "engcen6"))
+C:\PS> Test-VaultPassword -VaultAccount (Get-VaultAccount -User root -VaultSystem (Get-VaultSystem -Name "engcen6"))
 Verify credentials for vaulted account 'root' on system named 'engcen6' using PASAccount parameter
 
 .EXAMPLE
-C:\PS> Get-VaultAccount -User root -System (Get-VaultSystem -Name "engcen6") | Test-VaultPassword
+C:\PS> Get-VaultAccount -User root -VaultSystem (Get-VaultSystem -Name "engcen6") | Test-VaultPassword
 Verify credentials for vaulted account 'root' on system named 'engcen6' using input object from pipe
 #>
 function global:Test-VaultPassword
