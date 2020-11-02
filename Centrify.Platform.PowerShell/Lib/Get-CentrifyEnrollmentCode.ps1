@@ -41,7 +41,7 @@ This Cmdlet takes the following optional inputs: [String] Role, [String] ExpiryD
 This CmdLet returns the result on success. Returns failure message on failure.
 
 .EXAMPLE
-C:\PS> Get-CentrifyEnrollmentCode.ps1 
+C:\PS> Get-CentrifyEnrollmentCode 
 This CmdLet does nothing
 
 .EXAMPLE
