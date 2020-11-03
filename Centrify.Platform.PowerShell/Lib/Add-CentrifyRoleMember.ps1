@@ -36,7 +36,7 @@ Optional role name of the Role to add.
 .OUTPUTS
 
 .EXAMPLE
-C:\PS> Add-CentrifyRoleMember -PASRole (Get-CentrifyRole -Name "Sergeant") -User "bcrab@ocean.net"
+C:\PS> Add-CentrifyRoleMember -CentrifyRole (Get-CentrifyRole -Name "Sergeant") -User "bcrab@ocean.net"
 Add AD user 'bcrab' from 'ocean.net' domain to specified role using PASRole parameter
 
 .EXAMPLE
