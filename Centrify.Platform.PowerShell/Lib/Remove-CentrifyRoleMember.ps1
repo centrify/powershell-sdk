@@ -38,7 +38,7 @@ This CmdLet takes as input the following optional parameters: [String] User, [St
 This Cmdlet returns nothing in case of success. Returns failure message in case of failure.
 
 .EXAMPLE
-C:\PS> Remove-CentrifyRoleMember -PASRole (Get-CentrifyRole -Name "System Administrator") -User "bcrab@cps.ocean.net"
+C:\PS> Remove-CentrifyRoleMember -CentrifyRole (Get-CentrifyRole -Name "System Administrator") -User "bcrab@cps.ocean.net"
 Removes "bcrab@cps.ocean.net" user from the "System Administrator" role
 
 .EXAMPLE
