@@ -52,10 +52,10 @@ This CmdLet takes as input a PASUser object
 This Cmdlet returns result from attempting to update PASUser object
 
 .EXAMPLE
-C:\PS> Set-CentrifyUser -User (Get-CentrifyUser -Filter "bcrab")
+C:\PS> Set-CentrifyUser -CentrifyUser (Get-CentrifyUser -Filter "centrify1_user") -LoginName "centrify-new-user"
 
 .EXAMPLE
-C:\PS> Set-CentrifyUser -User (Get-CentrifyUser -Filter "bcrab") -MobileNumber "5555555555"
+C:\PS> Set-CentrifyUser -CentrifyUser (Get-CentrifyUser -Filter "centrify1_user") -MobileNumber "5555555555"
 Updates the MobileNumber attribute for PASUser "bcrab" 
 #>
 function global:Set-CentrifyUser
