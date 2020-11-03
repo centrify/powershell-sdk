@@ -25,8 +25,9 @@ Optional [String] filter parameter to query on. Search for match will include th
 
 .EXAMPLE
 
-.EXAMPLE
-
+.EXAMPLE 
+ C:\PS>  Invite-CentrifyUser -user "bcrab@aak0956"
+ "bcrab" user will receive an invite via email .
 .EXAMPLE
 #>
 function global:Invite-CentrifyUser
