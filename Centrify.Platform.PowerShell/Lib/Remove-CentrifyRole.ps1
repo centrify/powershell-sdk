@@ -27,7 +27,7 @@ NOTE: Get-CentrifyRole must be used to get the desired role.
 .OUTPUTS
 
 .EXAMPLE
-PS: C:\PS\Remove-CentrifyRole -PASRole (Get-CentrifyRole -Name "Unused Role")
+PS: C:\PS\ Remove-CentrifyRole -CentrifyRole (Get-CentrifyRole -Name "Unused Role")
 This CmdLet delete the Role named "Unused Role".
 #>
 function global:Remove-CentrifyRole
