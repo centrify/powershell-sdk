@@ -28,7 +28,7 @@ This CmdLet takes the following inputs: [Object] PASUser
 This CmdLet retruns nothing in case of success. Returns error message in case of error.
 
 .EXAMPLE
-PS: C:\PS\Remove-CentrifyUser -User (Get-CentrifyUser -Filter "bcrab")
+PS: C:\PS\ Remove-CentrifyUser -CentrifyUser (Get-CentrifyUser -Filter  "bcrab")
 This CmdLet gets the use "bcrab" and deletes the object.
 #>
 function global:Remove-CentrifyUser
