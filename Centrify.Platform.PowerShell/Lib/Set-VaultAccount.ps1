@@ -37,8 +37,8 @@ Optional IsManaged boolean flag to specify whether account password should be ma
 .OUTPUTS
 
 .EXAMPLE
-C:\PS> Set-VaultAccount -Account (Get-VaultAccount -User "root" -PASResource (Get-VaultSystem "RedHat7")) -Description "System Account"
-Update the description field for the account 'root' on system 'RedHat7' using the PASAccount parameter.
+C:\PS> Set-VaultAccount -VaultAccount (Get-VaultAccount -User "root" -VaultSystem (Get-VaultSystem "RedHat7")) -Description "System Account"
+Update the description field for the account 'root' on system 'RedHat7' using the VaultAccount parameter.
 
 .EXAMPLE
 C:\PS> Get-VaultAccount -User "sa" -Database (Get-VaultDatabase "WIN-SQLDB01\AUDIT")) | Set-VaultAccount -IsManaged $true
