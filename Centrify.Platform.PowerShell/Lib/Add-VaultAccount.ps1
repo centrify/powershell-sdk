@@ -49,8 +49,8 @@ One of [PASResource], [PASDomain] or [PASDatabase]
 [PASAccount]
 
 .EXAMPLE
-C:\PS> Add-VaultAccount -User "svc-bcrab" -PASResource (Get-VaultSystem "WIN-BLUECRAB01") -Password "!L1keSeaF00d"
-Add the local account 'svc-bcrab' to system named 'WIN-BLUECRAB01' using the PASRessource parameter.
+C:\PS>  Add-VaultAccount -User "svc-bcrab" -VaultSystem (Get-VaultSystem -Name "WIN-BLUECRAB01") -Password "!L1keSeaF00d"
+Add the local account 'svc-bcrab' to system named 'WIN-BLUECRAB01' using the VaultSystem parameter.
 
 .EXAMPLE
 C:\PS> PASDatabase (Get-VaultDatabase "castledb") | Add-VaultAccount -User "oracastle" -Password "J!IRU()U" -IsManaged $true
