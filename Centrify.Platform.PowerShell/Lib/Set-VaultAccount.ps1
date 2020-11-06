@@ -41,7 +41,7 @@ C:\PS> Set-VaultAccount -VaultAccount (Get-VaultAccount -User "root" -VaultSyste
 Update the description field for the account 'root' on system 'RedHat7' using the VaultAccount parameter.
 
 .EXAMPLE
-C:\PS> Get-VaultAccount -User "sa" -Database (Get-VaultDatabase "WIN-SQLDB01\AUDIT")) | Set-VaultAccount -IsManaged $true
+C:\PS> Get-VaultAccount -User "sa" -VaultDatabase (Get-VaultDatabase "WIN-SQLDB01\AUDIT")) | Set-VaultAccount -IsManaged $true
 Enable password management for the 'sa' on database 'WIN-SQLDB01\AUDIT' using the input pobject from pipeline.
 #> 
 function global:Set-VaultAccount
