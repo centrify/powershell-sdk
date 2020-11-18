@@ -162,9 +162,9 @@ function global:New-CentrifySet
 		        "Secrets" {
                     $NewCollection = Get-VaultSecretSet -Name $Name
                 }
-		        "Services" {
-                    $NewCollection = Get-VaultServiceSet -Name $Name
-                }
+		        #"Services" {
+                #    $NewCollection = Get-VaultServiceSet -Name $Name
+                #}
 		        "Accounts" {
                     $NewCollection = Get-VaultAccountSet -Name $Name
                 }
