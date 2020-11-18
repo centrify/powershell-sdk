@@ -197,17 +197,17 @@ function global:Add-VaultAccount
 		    if (-not [System.String]::IsNullOrEmpty($VaultSystem))
 		    {
     			# Return System account filtering by ID to avoid double result due to account being registered both with password and SSH Keys
-    			return (Get-VaultAccount -System $VaultSystem -User $User | Where-Object { $_.ID -eq $WebResponseResult.Result })
+    			return (Get-VaultAccount -VaultSystem $VaultSystem -User $User | Where-Object { $_.ID -eq $WebResponseResult.Result })
 		    }
             elseif (-not [System.String]::IsNullOrEmpty($VaultDomain))
 		    {
     			# Return Domain account
-    			return (Get-VaultAccount -Domain $VaultDomain -User $User)
+    			return (Get-VaultAccount -VaultDomain $VaultDomain -User $User)
 		    }
 		    elseif (-not [System.String]::IsNullOrEmpty($VaultDatabase))
 		    {
     			# Return Database account
-                return (Get-VaultAccount -Database $VaultDatabase -User $User)
+                return (Get-VaultAccount -VaultDatabase $VaultDatabase -User $User)
 		    }
 		}
 		else
