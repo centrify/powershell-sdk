@@ -154,16 +154,16 @@ function global:New-CentrifySet
                     $NewCollection = Get-VaultSystemSet -Name $Name
                 }
 		        "Domains" {
-                    $NewCollection = Get-VaultDomainCollection -Name $Name
+                    $NewCollection = Get-VaultDomainSet -Name $Name
                 }
 		        "Databases" {
-                    $NewCollection = Get-VaultDatabaseCollection -Name $Name
+                    $NewCollection = Get-VaultDatabaseSet -Name $Name
                 }
 		        "Secrets" {
                     $NewCollection = Get-VaultSecretSet -Name $Name
                 }
 		        "Services" {
-                    $NewCollection = Get-PASServiceCollection -Name $Name
+                    $NewCollection = Get-VaultServiceSet -Name $Name
                 }
 		        "Accounts" {
                     $NewCollection = Get-VaultAccountSet -Name $Name
