@@ -117,7 +117,7 @@ function global:Get-CentrifyEnrollmentCode
 			if (-not [System.String]::IsNullOrEmpty($Role))
 			{
 				# Get Role details
-				$CentrifyRole = Get-CentrifyRole -Filter $Role
+				$CentrifyRole = Get-CentrifyRole -Name $Role
 				if ([System.String]::IsNullOrEmpty($CentrifyRole))
 				{
 					# Role not found
