@@ -65,7 +65,7 @@ function global:Add-CentrifySetMember
 		[Parameter(ParameterSetName = "Domain")]
 		[Parameter(ParameterSetName = "Database")]
 		[Parameter(ParameterSetName = "Service")]
-		[System.Object]$PASCollection,
+		[System.Object]$CentrifySet,
 
 		[Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = "System")]
 		[System.Object]$VaultSystem,
@@ -83,7 +83,7 @@ function global:Add-CentrifySetMember
 		[System.Object]$VaultDatabase,
 
 		[Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = "Service")]
-		[System.Object]$PASService
+		[System.Object]$VaultService
 )
 	
 	# Debug preference
@@ -109,7 +109,7 @@ function global:Add-CentrifySetMember
 		$Header = @{ "X-CENTRIFY-NATIVE-CLIENT" = "1"; }
 
 		# Adding target information
-		if ([System.String]::IsNullOrEmpty($PASCollection.ID))
+		if ([System.String]::IsNullOrEmpty($CentrifySet.ID))
 		{
 			Throw "Cannot get SetID from given parameter."
 		}
@@ -141,21 +141,21 @@ function global:Add-CentrifySetMember
             elseif (-not [System.String]::IsNullOrEmpty($VaultDatabase))
             {
                 # Remove System
-                $Member.Key 		= $VaultSystem.ID
+                $Member.Key 		= $VaultDatabase.ID
                 $Member.MemberType 	= "Row"
                 $Member.Table 		= "VaultDatabase"
             }
             elseif (-not [System.String]::IsNullOrEmpty($VaultDomain))
             {
                 # Remove Account
-                $Member.Key 		= $VaultAccount.ID
+                $Member.Key 		= $VaultDomain.ID
                 $Member.MemberType 	= "Row"
                 $Member.Table 		= "VaultDomain"
             }
-            elseif (-not [System.String]::IsNullOrEmpty($PASService))
+            elseif (-not [System.String]::IsNullOrEmpty($VaultService))
             {
                 # Remove Secret
-                $Member.Key 		= $VaultSecret.ID
+                $Member.Key 		= $VaultService.ID
                 $Member.MemberType 	= "Row"
                 $Member.Table 		= "Subscriptions"
             }
