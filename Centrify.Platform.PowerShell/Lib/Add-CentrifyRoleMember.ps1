@@ -93,6 +93,11 @@ function global:Add-CentrifyRoleMember
 		}
 		else
 		{
+            # Set Json query
+		    $JsonQuery = @{}
+		    $JsonQuery.Name 		= $CentrifyRole.ID
+		    $JsonQuery.Description	= $CentrifyRole.Description
+
             # Validate Member
             if (-not [System.String]::IsNullOrEmpty($User))
             {
@@ -102,6 +107,7 @@ function global:Add-CentrifyRoleMember
                 {
                     Throw ("Cannot find User '{0}' in any Directory Services." -f $User)
                 } 
+    		    $JsonQuery.Users = @{"Add" = @($Member.InternalName)}
             }
             elseif (-not [System.String]::IsNullOrEmpty($Group))
             {
@@ -111,6 +117,7 @@ function global:Add-CentrifyRoleMember
                 {
                     Throw ("Cannot find Group '{0}' in any Directory Services." -f $Group)
                 } 
+    		    $JsonQuery.Groups = @{"Add" = @($Member.InternalName)}
             }
             elseif (-not [System.String]::IsNullOrEmpty($Role))
             {
@@ -120,13 +127,8 @@ function global:Add-CentrifyRoleMember
                 {
                     Throw ("Cannot find Role '{0}' in any Directory Services." -f $Role)
                 } 
+    		    $JsonQuery.Roles = @{"Add" = @($Member._ID)}
             }
-            
-            # Set Json query
-		    $JsonQuery = @{}
-		    $JsonQuery.Name 		= $CentrifyRole.ID
-		    $JsonQuery.Description	= $CentrifyRole.Description
-		    $JsonQuery.Users		= @{"Add" = @($Member.InternalName)}
 		}
 
 		# Build Json query

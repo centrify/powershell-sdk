@@ -99,6 +99,11 @@ function global:Remove-CentrifyRoleMember
 		}
 		else
 		{
+            # Set Json query
+		    $JsonQuery = @{}
+		    $JsonQuery.Name 		= $CentrifyRole.ID
+		    $JsonQuery.Description	= $CentrifyRole.Description
+
             # Validate Member
             if (-not [System.String]::IsNullOrEmpty($User))
             {
@@ -108,6 +113,7 @@ function global:Remove-CentrifyRoleMember
                 {
                     Throw ("Cannot find User '{0}' in any Directory Services." -f $User)
                 } 
+    		    $JsonQuery.Users = @{"Delete" = @($Member.InternalName)}
             }
             elseif (-not [System.String]::IsNullOrEmpty($Group))
             {
@@ -117,6 +123,7 @@ function global:Remove-CentrifyRoleMember
                 {
                     Throw ("Cannot find Group '{0}' in any Directory Services." -f $Group)
                 } 
+    		    $JsonQuery.Groups = @{"Delete" = @($Member.InternalName)}
             }
             elseif (-not [System.String]::IsNullOrEmpty($Role))
             {
@@ -126,13 +133,8 @@ function global:Remove-CentrifyRoleMember
                 {
                     Throw ("Cannot find Role '{0}' in any Directory Services." -f $Role)
                 } 
+    		    $JsonQuery.Roles = @{"Delete" = @($Member._ID)}
             }
-            
-            # Set Json query
-		    $JsonQuery = @{}
-		    $JsonQuery.Name 		= $CentrifyRole.ID
-		    $JsonQuery.Description	= $CentrifyRole.Description
-		    $JsonQuery.Users		= @{"Delete" = @($Member.InternalName)}
 		}
 
 		# Build Json query
