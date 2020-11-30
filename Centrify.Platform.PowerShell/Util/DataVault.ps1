@@ -233,7 +233,7 @@ function Centrify.Platform.PowerShell.DataVault.GetSecretContent
 	try
 	{
 		# Setup variable for connection
-		$Uri = ("https://{0}/ServerManage/RetrieveDataVaultItemContents" -f $PlatformConnection.PodFqdn)
+		$Uri = ("https://{0}/ServerManage/RetrieveSecretContents" -f $PlatformConnection.PodFqdn)
         $ContentType = "application/json" 
 		$Header = @{ "X-CENTRIFY-NATIVE-CLIENT" = "1" }
 	

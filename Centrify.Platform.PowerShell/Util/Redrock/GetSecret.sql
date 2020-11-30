@@ -1,8 +1,4 @@
 SELECT
  * 
 FROM
- DataVault 
-ORDER BY
- SecretName 
-COLLATE
- NOCASE
+ DataVault

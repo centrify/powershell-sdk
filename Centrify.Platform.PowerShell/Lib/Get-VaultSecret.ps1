@@ -48,6 +48,9 @@ function global:Get-VaultSecret
 		[Parameter(Mandatory = $false, HelpMessage = "Specify File Path to download retrieved secret.")]
 		[System.String]$Path,
 
+		[Parameter(Mandatory = $false, HelpMessage = "Retrieve secret contents.")]
+		[Switch]$Retrieve,
+
 		[Parameter(Mandatory = $false, HelpMessage = "Show details.")]
 		[Switch]$Detailed
 	)
@@ -70,7 +73,7 @@ function global:Get-VaultSecret
 		$PlatformConnection = Centrify.Platform.PowerShell.Core.GetPlatformConnection
 
 		# Set RedrockQuery
-		$Query = Centrify.Platform.PowerShell.Redrock.GetQueryFromFile -Name "GetSecret"
+		$BaseQuery = Centrify.Platform.PowerShell.Redrock.GetQueryFromFile -Name "GetSecret"
 		
 		# Set Arguments
 		$Arguments = @{}
@@ -91,6 +94,18 @@ function global:Get-VaultSecret
 			$Arguments.Caching	 	= 0
 		}
 
+		# Name not specified
+		if ([System.String]::IsNullOrEmpty($Name))
+		{
+			# No secret Name given, return ALL Secrets from all Folders
+			$Query = ("{0} ORDER BY SecretName COLLATE NOCASE" -f $BaseQuery)
+		}
+		else
+		{
+			# Get User from ALL Resources
+			$Query = ("{0} WHERE DataVault.SecretName = '{1}'" -f $BaseQuery, $Name)
+		}
+
 		# Build Query
 		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query -Arguments $Arguments
 
@@ -104,24 +119,16 @@ function global:Get-VaultSecret
 		if ($WebResponseResult.Success)
 		{
 			# Get raw data
-			if ([System.String]::IsNullOrEmpty($Name))
+			if ($Retrieve.IsPresent)
             {
-                # Get all results
-                $VaultSecrets = $WebResponseResult.Result.Results.Row
-            }
-            else
-            {
-                # Get Secret by name and return its content
-                $VaultSecret = $WebResponseResult.Result.Results.Row | Where-Object { $_.SecretName -eq $Name }
-		        
                 # Setup variable for query
-		        $Uri = ("https://{0}/ServerManage/RetrieveDataVaultItem" -f $PlatformConnection.PodFqdn)
+		        $Uri = ("https://{0}/ServerManage/RetrieveSecretMetadata" -f $PlatformConnection.PodFqdn)
 		        $ContentType = "application/json" 
 		        $Header = @{ "X-CENTRIFY-NATIVE-CLIENT" = "1"; }
 
 		        # Set Json query
 		        $JsonQuery = @{}
-		        $JsonQuery.ID	= $VaultSecret.ID
+		        $JsonQuery.ID	= $WebResponseResult.Result.Results.Row.ID
 
 		        # Build Json query
 		        $Json = $JsonQuery | ConvertTo-Json
@@ -136,18 +143,18 @@ function global:Get-VaultSecret
 		        if ($WebResponseResult.Success)
 		        {
 			        # Success return Secret content
-                    $SecretContent = Centrify.Platform.PowerShell.DataVault.GetSecretContent -SecretID $VaultSecret.ID
+                    $SecretContent = Centrify.Platform.PowerShell.DataVault.GetSecretContent -SecretID $WebResponseResult.Result.'_RowKey'
 			        if ($SecretContent -ne [Void]$null)
                     {
                         if ($WebResponseResult.Result.Type -eq "Text")
                         {
-                            # Return Secret content as an attribute of VaultSecret object
-                            $VaultSecrets | Add-Member -MemberType NoteProperty -Name SecretText -Value $SecretContent.SecretText
+                            # Return Secret content
+                            return $SecretContent.SecretText
                         }
 			            elseif ($WebResponseResult.Result.Type -eq "File")
                         {
                             # Request File Download Url
-                            $DownloadRequest = Centrify.Platform.PowerShell.DataVault.RequestSecretDownloadUrl -SecretID $VaultSecret.ID
+                            $DownloadRequest = Centrify.Platform.PowerShell.DataVault.RequestSecretDownloadUrl -SecretID $WebResponseResult.Result.'_RowKey'
 
                             # Get file value from Path and File Name
                             if ([System.String]::IsNullOrEmpty($Path))
@@ -177,7 +184,12 @@ function global:Get-VaultSecret
 			        Throw $WebResponseResult.Message
 		        }
             }
-            
+            else
+            {
+                # Get query result
+                $VaultSecrets = $WebResponseResult.Result.Results.Row
+            }
+
             # Only modify results if not empty
             if ($VaultSecrets -ne [Void]$null -and $Detailed.IsPresent)
             {

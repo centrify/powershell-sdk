@@ -133,7 +133,7 @@ function global:Get-VaultAccount
 				else
 				{
 					# Get User from this Resource
-					$Query = ("{0} WHERE VaultAccount.Host = '{1}' AND VaultAccount.User ='{2}'" -f $BaseQuery, $VaultSystem.ID, $User)
+					$Query = ("{0} WHERE VaultAccount.Host = '{1}' AND VaultAccount.User = '{2}'" -f $BaseQuery, $VaultSystem.ID, $User)
 				}
 			}
 
