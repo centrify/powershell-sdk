@@ -1,8 +1,0 @@
-SELECT
- * 
-FROM
- SshKeys 
-ORDER BY
- Name 
-COLLATE
- NOCASE
