@@ -52,6 +52,9 @@ function global:Get-VaultSshKey
 		[Parameter(Mandatory = $false, HelpMessage = "Specify the private key passphrase.")]
 		[System.String]$Passphrase,
 
+		[Parameter(Mandatory = $false, HelpMessage = "Retrieve ssh key contents.")]
+		[Switch]$Retrieve,
+
 		[Parameter(Mandatory = $false, HelpMessage = "Show details.")]
 		[Switch]$Detailed
 	)
@@ -74,7 +77,7 @@ function global:Get-VaultSshKey
 		$PlatformConnection = Centrify.Platform.PowerShell.Core.GetPlatformConnection
 
 		# Set RedrockQuery
-		$Query = Centrify.Platform.PowerShell.Redrock.GetQueryFromFile -Name "GetSshKey"
+		$BaseQuery = Centrify.Platform.PowerShell.Redrock.GetQueryFromFile -Name "GetSshKey"
 		
 		# Set Arguments
 		$Arguments = @{}
@@ -95,6 +98,18 @@ function global:Get-VaultSshKey
 			$Arguments.Caching	 	= 0
 		}
 
+		# Name not specified
+		if ([System.String]::IsNullOrEmpty($Name))
+		{
+			# No SSH Key Name given, return ALL SSH Keys from Vault
+			$Query = ("{0} ORDER BY Name COLLATE NOCASE" -f $BaseQuery)
+		}
+		else
+		{
+			# Get User from ALL Resources
+			$Query = ("{0} WHERE SshKeys.Name = '{1}'" -f $BaseQuery, $Name)
+		}
+
 		# Build Query
 		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query -Arguments $Arguments
 
@@ -108,16 +123,11 @@ function global:Get-VaultSshKey
 		if ($WebResponseResult.Success)
 		{
 			# Get raw data
-			if ([System.String]::IsNullOrEmpty($Name))
+			if ($Retrieve.IsPresent)
             {
-                # Get all results
-                $VaultSshKeys = $WebResponseResult.Result.Results.Row
-            }
-            else
-            {
-                # Get SshKey by name and return key in requested format and type 
-			    $VaultSshKey = $WebResponseResult.Result.Results.Row | Where-Object { $_.Name -eq $Name }
-			    
+                # Get SSH Key ID and return key in requested format and type 
+			    $VaultSshKeyID = $WebResponseResult.Result.Results.Row.ID
+                
                 # Setup variable for query
 		        $Uri = ("https://{0}/ServerManage/RetrieveSshKey" -f $PlatformConnection.PodFqdn)
 		        $ContentType = "application/json" 
@@ -125,7 +135,7 @@ function global:Get-VaultSshKey
 
 		        # Set Json query
 		        $JsonQuery = @{}
-		        $JsonQuery.ID	        = $VaultSshKey.ID
+		        $JsonQuery.ID	        = $VaultSshKeyID
 		        $JsonQuery.KeyFormat    = "PEM"
 		        $JsonQuery.KeyPairType	= "PrivateKey"
 
@@ -160,7 +170,7 @@ function global:Get-VaultSshKey
 		                # Set Json query
 		                $JsonQuery = @{}
 		                $JsonQuery['hidden-field-1733-inputEl'] = $PrivateKey
-		                $JsonQuery.ID	        = $PASSshKey.ID
+		                $JsonQuery.ID	        = $VaultSshKeyID
 		                $JsonQuery.KeyFormat    = $KeyFormat
 		                $JsonQuery.KeyPairType	= "PublicKey"
 
@@ -197,7 +207,12 @@ function global:Get-VaultSshKey
 			        Throw $WebResponseResult.Message
 		        }
             }
-            
+            else
+            {
+                # Get all results
+                $VaultSshKeys = $WebResponseResult.Result.Results.Row
+            }
+
             # Only modify results if not empty
             if ($VaultSshKeys -ne [Void]$null -and $Detailed.IsPresent)
             {

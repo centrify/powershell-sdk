@@ -142,8 +142,9 @@ function global:Get-VaultSecret
 		        $WebResponseResult = $WebResponse.Content | ConvertFrom-Json
 		        if ($WebResponseResult.Success)
 		        {
-			        # Success return Secret content
-                    $SecretContent = Centrify.Platform.PowerShell.DataVault.GetSecretContent -SecretID $WebResponseResult.Result.'_RowKey'
+			        # Get Secret ID and return secret content
+                    $SecretID = $WebResponseResult.Result.'_RowKey'
+                    $SecretContent = Centrify.Platform.PowerShell.DataVault.GetSecretContent -SecretID $SecretID
 			        if ($SecretContent -ne [Void]$null)
                     {
                         if ($WebResponseResult.Result.Type -eq "Text")
@@ -154,7 +155,7 @@ function global:Get-VaultSecret
 			            elseif ($WebResponseResult.Result.Type -eq "File")
                         {
                             # Request File Download Url
-                            $DownloadRequest = Centrify.Platform.PowerShell.DataVault.RequestSecretDownloadUrl -SecretID $WebResponseResult.Result.'_RowKey'
+                            $DownloadRequest = Centrify.Platform.PowerShell.DataVault.RequestSecretDownloadUrl -SecretID $SecretID
 
                             # Get file value from Path and File Name
                             if ([System.String]::IsNullOrEmpty($Path))
