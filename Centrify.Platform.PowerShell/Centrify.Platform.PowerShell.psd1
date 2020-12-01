@@ -17,7 +17,7 @@
 	Description 		= 'This PowerShell module is to be used with Centrify Platform (both SaaS and on-premise Centrify Platform tenants are supported).'
 	GUID 				= '325f94ca-6660-a42b-210d-21ef3488f9ea'
 	ModuleToProcess 	= 'Centrify.Platform.PowerShell.psm1'
-	ModuleVersion 		= '1.13.1609'
+	ModuleVersion 		= '1.14.0112'
     NestedModules       = @(
                             # Loading Utils functions
                             '.\Util\Core.ps1',
