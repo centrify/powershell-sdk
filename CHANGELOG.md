@@ -1,4 +1,17 @@
 # CHANGELOG
+**1.14.0112**
+
+- Renaming the module into Centrify.Platform.Powershell for marketing alignment
+- Renaming all cmdlets part of the module for marketing alignement with Centrify Vault Suite
+- Fix Role membership update
+- Fix call to Get-CentrifyRole
+- Fix issue with paremters using Get-VaultAccount
+- Fix call to resultant object
+- Adding new cmdlets for Set management
+- Fix variables name
+- Fix Get-VaultSecret
+- Fix Get-VaultSshKey
+
 **1.13.1609**
 
 - Fixing several issues with cross cmdlet calls calling for wrong parameter
