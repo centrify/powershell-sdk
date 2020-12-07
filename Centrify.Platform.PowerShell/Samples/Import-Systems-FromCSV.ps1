@@ -1,7 +1,7 @@
 ###############################################################################################################
 # Import Systems from CSV
 #
-# DISCLAIMER   : Sample script using the Centrify.PrivilegedAccessService.PowerShell Module to demonstrate how to add Systems into Centrify Privilege Access Service (CPAS), add them to Sets and configure permissions. 
+# DISCLAIMER   : Sample script using the Centrify.Platform.PowerShell Module to demonstrate how to add Systems into Centrify Privilege Access Service (CPAS), add them to Sets and configure permissions. 
 ###############################################################################################################
 
 param
@@ -32,7 +32,7 @@ else
 ##########################################
 
 # Add PowerShell Module to session if not already loaded
-[System.String]$ModuleName = "Centrify.PrivilegedAccessService.PowerShell"
+[System.String]$ModuleName = "Centrify.Platform.PowerShell"
 # Load PowerShell Module if not already loaded
 if (@(Get-Module | Where-Object {$_.Name -eq $ModuleName}).count -eq 0)
 {
@@ -56,13 +56,13 @@ if (@(Get-Module | Where-Object {$_.Name -eq $ModuleName}).count -eq 0)
 $Url = "tenant.my.centrify.net" # your tenant url
 $Client = "OAuthClient"         # the OAuth2 Client application ID to use
 $Scope = "All"                  # the scope to use for the Oauth token
-$Secret = ""                    # the Base64 string used for the Basic Authentication, can be obtained using: Connect-PASPlatform -EncodeSecret
+$Secret = ""                    # the Base64 string used for the Basic Authentication, can be obtained using: Connect-CentrifyPlatform -EncodeSecret
 
-if ($PASConnection -eq [Void]$Null)
+if ($PlatformConnection -eq [Void]$Null)
 {
-    # Connect to Centrify Identity Services
-    Connect-PASPlatform -Url $Url -Client $Client -Scope $Scope -Secret $Secret
-    if ($PASConnection -eq [Void]$Null)
+    # Connect to Centrify Platform
+    Connect-CentrifyPlatform -Url $Url -Client $Client -Scope $Scope -Secret $Secret
+    if ($PlatformConnection -eq [Void]$Null)
     {
         Throw "Unable to establish connection."
     }
@@ -80,8 +80,8 @@ if (Test-Path -Path $File)
         foreach ($Entry in $Data)
         {
             # Verify if System already exist
-            $PASSystem = Get-PASSystem -Name $Entry.Name
-            if ($PASSystem -eq [Void]$null)
+            $VaultSystem = Get-VaultSystem -Name $Entry.Name
+            if ($VaultSystem -eq [Void]$null)
             {
                 Write-Debug ("System '{0}' does not exists." -f $Entry.Name)
                 # Set boolean values
@@ -92,8 +92,8 @@ if (Test-Path -Path $File)
                 }
             
                 # Create system
-                $PASSystem = New-PASSystem -Name $Entry.Name -Fqdn $Entry.Fqdn -ComputerClass $Entry.ComputerClass -Description $Entry.Description -ProxyUser $Entry.ProxyUser -ProxyUserPassword $Entry.ProxyUserPassword -ProxyUserIsManaged $ProxyUserIsManaged
-                Write-Debug ("System '{0}' has been created." -f $PASSystem.Name)
+                $VaultSystem = New-VaultSystem -Name $Entry.Name -Fqdn $Entry.Fqdn -ComputerClass $Entry.ComputerClass -Description $Entry.Description -ProxyUser $Entry.ProxyUser -ProxyUserPassword $Entry.ProxyUserPassword -ProxyUserIsManaged $ProxyUserIsManaged
+                Write-Debug ("System '{0}' has been created." -f $VaultSystem.Name)
             }
             
             # Verify if SystemPermissions should be set
@@ -104,8 +104,8 @@ if (Test-Path -Path $File)
                 $Entry.Permissions.Split(';') | ForEach-Object {
                     # Principal and Rights are separated by column
                     # e.g. ADGroup@domain.name:Grant,View,Edit,Delete
-                    Set-PASPermissions -PASSystem $PASSystem -Principal $_.Split(':')[0] -Rights $_.Split(':')[1]
-                    Write-Debug ("'{0}' has been granted '{1}' permissions on System '{2}'." -f $_.Split(':')[0], $_.Split(':')[1], $PASSystem.Name)
+                    Set-VaultPermission -VaultSystem $VaultSystem -Principal $_.Split(':')[0] -Rights $_.Split(':')[1]
+                    Write-Debug ("'{0}' has been granted '{1}' permissions on System '{2}'." -f $_.Split(':')[0], $_.Split(':')[1], $VaultSystem.Name)
                 }
             }
             
@@ -116,12 +116,12 @@ if (Test-Path -Path $File)
                 # Each Set name is comma separated
                 $Entry.Sets.Split(',') | ForEach-Object {
                     # Get System Set and add System to it if exist
-                    $SystemSet = Get-PASSystemCollection -Name $_
+                    $SystemSet = Get-VaultSystemSet -Name $_
                     if ($SystemSet -ne [Void]$null)
                     {
                         # Add system to set
-                        Add-PASCollectionMember -PASCollection $SystemSet -PASSystem $PASSystem
-                        Write-Debug ("System '{0}' has been added to Set '{1}'." -f $PASSystem.Name, $SystemSet.Name)
+                        Add-CentrifySetMember -CentrifySet $SystemSet -VaultSystem $VaultSystem
+                        Write-Debug ("System '{0}' has been added to Set '{1}'." -f $VaultSystem.Name, $SystemSet.Name)
                     }
                 }
             }
