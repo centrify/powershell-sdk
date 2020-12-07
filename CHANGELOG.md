@@ -1,4 +1,8 @@
 # CHANGELOG
+**1.14.0712**
+
+- Fix Samples scripts to use new cmdlets names
+
 **1.14.0112**
 
 - Renaming the module into Centrify.Platform.Powershell for marketing alignment
