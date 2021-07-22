@@ -118,7 +118,7 @@ function global:Set-VaultSecret
         else
         {
             # Update value
-            $JsonQuery.SecretName 	= $Description
+            $JsonQuery.Description 	= $Description
         }
 
 		if ($VaultSecret.Type -eq "Text")
