@@ -267,3 +267,49 @@ function Centrify.Platform.PowerShell.DataVault.GetSecretContent
 		Throw $_.Exception   
 	}
 }
+
+function Centrify.Platform.PowerShell.DataVault.GetSshKeyUsage
+{
+	param
+	(
+		[Parameter(Mandatory = $true, HelpMessage = "Specify the SSH Key ID.")]
+		[System.String]$SshKeyId
+    )
+    
+	try
+	{
+		# Setup variable for connection
+		$Uri = ("https://{0}/ServerManage/GetSShKeyUsage" -f $PlatformConnection.PodFqdn)
+        $ContentType = "application/json" 
+		$Header = @{ "X-CENTRIFY-NATIVE-CLIENT" = "1" }
+	
+		# Set Json query
+		$JsonQuery = @{}
+		$JsonQuery.ID	= $SshKeyId
+
+		# Build Json query
+		$Json = $JsonQuery | ConvertTo-Json
+
+		# Debug informations
+		Write-Debug ("Uri= {0}" -f $Uri)
+		Write-Debug ("Json= {0}" -f $Json)
+		
+		# Connect using RestAPI
+		$WebResponse = Invoke-WebRequest -UseBasicParsing -Method Post -Uri $Uri -Body $Json -ContentType $ContentType -Headers $Header -WebSession $PlatformConnection.Session
+		$WebResponseResult = $WebResponse.Content | ConvertFrom-Json
+		if ($WebResponseResult.Success)
+		{
+            # Return Content
+            return $WebResponseResult.Result
+		}
+		else
+		{
+			# Unsuccesful connection
+			Throw $WebResponseResult.Message
+		}
+	}
+	catch
+	{
+		Throw $_.Exception   
+	}
+}
