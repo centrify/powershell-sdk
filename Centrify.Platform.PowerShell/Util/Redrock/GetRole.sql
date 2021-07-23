@@ -1,9 +1,4 @@
 SELECT
- ID,
- Name,
- Description,
- DirectoryServiceUuid,
- RoleType,
- ReadOnly 
+ *
 FROM
  Role 

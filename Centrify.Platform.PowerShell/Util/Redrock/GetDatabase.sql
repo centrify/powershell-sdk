@@ -1,7 +1,4 @@
 SELECT
  *
 FROM
- VaultDatabase 
-ORDER BY
- Name 
-COLLATE NOCASE
+ VaultDatabase
