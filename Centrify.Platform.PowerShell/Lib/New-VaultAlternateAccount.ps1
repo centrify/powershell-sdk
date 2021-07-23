@@ -68,7 +68,7 @@ function global:New-VaultAlternateAccount
 			# Get Vault Account
             $AccountName = $Account.Split('@')[0]
             $AccountDomain = $Account.Split('@')[1]
-            $VaultAccount = Get-VaultAccount -Domain (Get-VaultDomain -Name $AccountDomain) -User $AccountName
+            $VaultAccount = Get-VaultAccount -VaultDomain (Get-VaultDomain -Name $AccountDomain) -User $AccountName
             if ($VaultAccount -eq [Void]$null)
             {
                 # Could not find any Domain Account with parameters given
