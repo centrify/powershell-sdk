@@ -1,7 +1,7 @@
 ###############################################################################################################
 # Import Secrets from CSV
 #
-# DISCLAIMER   : Sample script using the Centrify.PrivilegedAccessService.PowerShell Module to demonstrate how to add Secrets into Centrify Privilege Access Service (CPAS) and add them to Sets.
+# DISCLAIMER   : Sample script using the Centrify.Platform.PowerShell Module to demonstrate how to add Secrets into Centrify Privilege Access Service (CPAS) and add them to Sets.
 ###############################################################################################################
 
 param
@@ -32,7 +32,7 @@ else
 ##########################################
 
 # Add PowerShell Module to session if not already loaded
-[System.String]$ModuleName = "Centrify.PrivilegedAccessService.PowerShell"
+[System.String]$ModuleName = "Centrify.Platform.PowerShell"
 # Load PowerShell Module if not already loaded
 if (@(Get-Module | Where-Object {$_.Name -eq $ModuleName}).count -eq 0)
 {
@@ -56,13 +56,13 @@ if (@(Get-Module | Where-Object {$_.Name -eq $ModuleName}).count -eq 0)
 $Url = "tenant.my.centrify.net" # your tenant url
 $Client = "OAuthClient"         # the OAuth2 Client application ID to use
 $Scope = "All"                  # the scope to use for the Oauth token
-$Secret = ""                    # the Base64 string used for the Basic Authentication, can be obtained using: Connect-PASPlatform -EncodeSecret
+$Secret = ""                    # the Base64 string used for the Basic Authentication, can be obtained using: Connect-CentrifyPlatform -EncodeSecret
 
-if ($PASConnection -eq [Void]$Null)
+if ($PlatformConnection -eq [Void]$Null)
 {
     # Connect to Centrify Identity Services
-    Connect-PASPlatform -Url $Url -Client $Client -Scope $Scope -Secret $Secret
-    if ($PASConnection -eq [Void]$Null)
+    Connect-CentrifyPlatform -Url $Url -Client $Client -Scope $Scope -Secret $Secret
+    if ($PlatformConnection -eq [Void]$Null)
     {
         Throw "Unable to establish connection."
     }
@@ -80,19 +80,19 @@ if (Test-Path -Path $File)
         foreach ($Entry in $Data)
         {
             # Verify if Secret already exist
-            $PASSecret = Get-PASSecret -Name $Entry.Name
-            if ($PASSecret -eq [Void]$null)
+            $VaultSecret = Get-VaultSecret -Name $Entry.Name
+            if ($VaultSecret -eq [Void]$null)
             {
                 Write-Debug ("Secret '{0}' does not exists." -f $Entry.Name)
                 # Create secret
                 if ([System.String]::IsNullOrEmpty($Entry.Text)) {
                     # Import File secret
-                    $PASSecret = New-PASSecret -Name $Entry.Name -Description $Entry.Description -File $Entry.File -Password $Entry.Password
+                    $VaultSecret = New-VaultSecret -Name $Entry.Name -Description $Entry.Description -File $Entry.File -Password $Entry.Password
                     Write-Debug ("File Secret '{0}' has been created." -f $Entry.Name)
                 }
                 else {
                     # Import Text secret
-                    $PASSecret = New-PASSecret -Name $Entry.Name -Description $Entry.Description -Text $Entry.Text
+                    $VaultSecret = New-VaultSecret -Name $Entry.Name -Description $Entry.Description -Text $Entry.Text
                     Write-Debug ("Text Secret '{0}' has been created." -f $Entry.Name)
                 }
             }
@@ -105,8 +105,8 @@ if (Test-Path -Path $File)
                 $Entry.Permissions.Split(';') | ForEach-Object {
                     # Principal and Rights are separated by column
                     # e.g. ADGroup@domain.name:Grant,View,Edit,Delete
-                    Set-PASPermissions -PASSecret $PASSecret -Principal $_.Split(':')[0] -Rights $_.Split(':')[1]
-                    Write-Debug ("'{0}' has been granted '{1}' permissions on Secret '{2}'." -f $_.Split(':')[0], $_.Split(':')[1], $PASSecret.Name)
+                    Set-VaultPermission -VaultSecret $VaultSecret -Principal $_.Split(':')[0] -Rights $_.Split(':')[1]
+                    Write-Debug ("'{0}' has been granted '{1}' permissions on Secret '{2}'." -f $_.Split(':')[0], $_.Split(':')[1], $VaultSecret.Name)
                 }
             }
             
@@ -117,12 +117,12 @@ if (Test-Path -Path $File)
                 # Each Set name is comma separated
                 $Entry.Sets.Split(',') | ForEach-Object {
                     # Get System Set and add System to it if exist
-                    $SecretSet = Get-PASSecretCollection -Name $_
+                    $SecretSet = Get-VaultSecretSet -Name $_
                     if ($SecretSet -ne [Void]$null)
                     {
                         # Add system to set
-                        Add-PASCollectionMember -PASCollection $SecretSet -PASSecret $PASSecret
-                        Write-Debug ("Secret '{0}' has been added to Set '{1}'." -f $PASSecret.Name, $SecretSet.Name)
+                        Add-CentrifySetMember -CentrifySet $SecretSet -VaultSecret $VaultSecret
+                        Write-Debug ("Secret '{0}' has been added to Set '{1}'." -f $VaultSecret.Name, $SecretSet.Name)
                     }
                 }
             }

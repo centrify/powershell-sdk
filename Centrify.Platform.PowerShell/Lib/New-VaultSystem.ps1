@@ -69,7 +69,7 @@ function global:New-VaultSystem
 		[Parameter(Mandatory = $true, HelpMessage = "Specify the fully qualified DNS name or the IP address to use to connect to this system.")]
 		[System.String]$Fqdn,
 		
-		[Parameter(Mandatory = $false, HelpMessage = "Specify the Computer class of this resource.")]
+		[Parameter(Mandatory = $true, HelpMessage = "Specify the Computer class of this resource.")]
 		[ValidateSet("Windows", "Unix", "CiscoIOS", "CiscoNXOS", "JuniperJunos", "GenericSsh", IgnoreCase = $false)]
 		[System.String]$ComputerClass,
 		

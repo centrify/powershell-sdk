@@ -1,7 +1,7 @@
 ###############################################################################################################
 # Import System Accounts from CSV
 #
-# DISCLAIMER   : Sample script using the Centrify.PrivilegedAccessService.PowerShell Module to demonstrate how to add Account to Systems into Centrify Privilege Access Service (CPAS), add them to Sets and configure permissions. 
+# DISCLAIMER   : Sample script using the Centrify.Platform.PowerShell Module to demonstrate how to add Account to Systems into Centrify Privilege Access Service (CPAS), add them to Sets and configure permissions. 
 ###############################################################################################################
 
 param
@@ -32,7 +32,7 @@ else
 ##########################################
 
 # Add PowerShell Module to session if not already loaded
-[System.String]$ModuleName = "Centrify.PrivilegedAccessService.PowerShell"
+[System.String]$ModuleName = "Centrify.Platform.PowerShell"
 # Load PowerShell Module if not already loaded
 if (@(Get-Module | Where-Object {$_.Name -eq $ModuleName}).count -eq 0)
 {
@@ -56,13 +56,13 @@ if (@(Get-Module | Where-Object {$_.Name -eq $ModuleName}).count -eq 0)
 $Url = "tenant.my.centrify.net" # your tenant url
 $Client = "OAuthClient"         # the OAuth2 Client application ID to use
 $Scope = "All"                  # the scope to use for the Oauth token
-$Secret = ""                    # the Base64 string used for the Basic Authentication, can be obtained using: Connect-PASPlatform -EncodeSecret
+$Secret = ""                    # the Base64 string used for the Basic Authentication, can be obtained using: Connect-CentrifyPlatform -EncodeSecret
 
-if ($PASConnection -eq [Void]$Null)
+if ($PlatformConnection -eq [Void]$Null)
 {
     # Connect to Centrify Identity Services
-    Connect-PASPlatform -Url $Url -Client $Client -Scope $Scope -Secret $Secret
-    if ($PASConnection -eq [Void]$Null)
+    Connect-CentrifyPlatform -Url $Url -Client $Client -Scope $Scope -Secret $Secret
+    if ($PlatformConnection -eq [Void]$Null)
     {
         Throw "Unable to establish connection."
     }
@@ -80,16 +80,16 @@ if (Test-Path -Path $File)
         foreach ($Entry in $Data)
         {
             # Verify if System exist
-            $PASSystem = Get-PASSystem -Name $Entry.System
-            if ($PASSystem -eq [Void]$null)
+            $VaultSystem = Get-VaultSystem -Name $Entry.System
+            if ($VaultSystem -eq [Void]$null)
             {
                 Write-Debug ("System '{0}' does not exists." -f $Entry.System)
                 Throw "Cannot add Accout to missing System."
             }
 
             # Verify if Account already exist
-            $PASAccount = Get-PASAccount -PASSystem $PASSystem -User $Entry.User
-            if ($PASAccount -eq [Void]$null)
+            $VaultAccount = Get-VaultAccount -VaultSystem $VaultSystem -User $Entry.User
+            if ($VaultAccount -eq [Void]$null)
             {
                 Write-Debug ("Account '{0}' does not exists." -f $Entry.User)
                 # Set boolean values
@@ -100,8 +100,8 @@ if (Test-Path -Path $File)
                 }
             
                 # Create account
-                $PASAccount = Add-PASAccount -PASSystem $PASSystem -User $Entry.User -Password $Entry.Password -IsManaged $IsManaged
-                Write-Debug ("Account '{0}' has been created." -f $PASAccount.User)
+                $VaultAccount = Add-VaultAccount -VaultSystem $VaultSystem -User $Entry.User -Password $Entry.Password -IsManaged $IsManaged
+                Write-Debug ("Account '{0}' has been created." -f $VaultAccount.User)
             }
             
             # Verify if AccountPermissions should be set
@@ -112,8 +112,8 @@ if (Test-Path -Path $File)
                 $Entry.Permissions.Split(';') | ForEach-Object {
                     # Principal and Rights are separated by column
                     # e.g. ADGroup@domain.name:Grant,View,Edit,Delete
-                    Set-PASPermissions -PASAccount $PASAccount -Principal $_.Split(':')[0] -Rights $_.Split(':')[1]
-                    Write-Debug ("'{0}' has been granted '{1}' permissions on Account '{2}'." -f $_.Split(':')[0], $_.Split(':')[1], $PASAccount.User)
+                    Set-VaultPermission -VaultAccount $VaultAccount -Principal $_.Split(':')[0] -Rights $_.Split(':')[1]
+                    Write-Debug ("'{0}' has been granted '{1}' permissions on Account '{2}'." -f $_.Split(':')[0], $_.Split(':')[1], $VaultAccount.User)
                 }
             }
             
@@ -124,12 +124,12 @@ if (Test-Path -Path $File)
                 # Each Set name is comma separated
                 $Entry.Sets.Split(',') | ForEach-Object {
                     # Get Account Set and add Account to it if exist
-                    $AccountSet = Get-PASAccountCollection -Name $_
+                    $AccountSet = Get-VaultAccountSet -Name $_
                     if ($AccountSet -ne [Void]$null)
                     {
                         # Add account to set
-                        Add-PASCollectionMember -PASCollection $AccountSet -PASAccount $PASAccount
-                        Write-Debug ("Account '{0}' has been added to Set '{1}'." -f $PASAccount.User, $AccountSet.Name)
+                        Add-CentrifySetMember -CentrifySet $AccountSet -VaultAccount $VaultAccount
+                        Write-Debug ("Account '{0}' has been added to Set '{1}'." -f $VaultAccount.User, $AccountSet.Name)
                     }
                 }
             }
