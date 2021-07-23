@@ -34,7 +34,7 @@ function global:Set-VaultSshKey
 {
 	param
 	(
-		[Parameter(Mandatory = $true, HelpMessage = "Specify the ID of the SSH Key to update.")]
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true, HelpMessage = "Specify the ID of the SSH Key to update.")]
 		[System.String]$Id,
         
         [Parameter(Mandatory = $false, HelpMessage = "Specify the new Name for the SSH Key to update.")]
@@ -55,39 +55,28 @@ function global:Set-VaultSshKey
 		# Debug message are turned off
 		$DebugPreference = "SilentlyContinue"
 	}
-	
-    if (Test-Path -Path $PrivateKey)
-    {
-        # Read key file and format data into one string
-        $RawKey = ""
-        Get-Content -Path $PrivateKey | ForEach-Object {
-            $RawKey += ("{0}`n" -f $_ )
-        }
-    }
-    else
-    {
-        Throw "Can't open private key file."
-    }
 
-	# Get current connection to the Centrify Platform
+    # Get current connection to the Centrify Platform
 	$PlatformConnection = Centrify.Platform.PowerShell.Core.GetPlatformConnection
 
 	try
 	{	
 		# Setup variable for query
-		$Uri = ("https://{0}/ServerManage/AddSshKey" -f $PlatformConnection.PodFqdn)
+		$Uri = ("https://{0}/ServerManage/UpdateSshKey" -f $PlatformConnection.PodFqdn)
 		$ContentType = "application/json" 
 		$Header = @{ "X-CENTRIFY-NATIVE-CLIENT" = "1"; }
 
 		# Set Json query
 		$JsonQuery = @{}
-		$JsonQuery.Name 	  = $Name
-    	$JsonQuery.PrivateKey = $RawKey
-    	$JsonQuery.Type       = "Manual"
+		$JsonQuery.Id 	  = $Id
 
-		if (-not [System.String]::IsNullOrEmpty($Passphrase))
+        if (-not [System.String]::IsNullOrEmpty($Name))
         {
-            $JsonQuery.Passphrase = $Passphrase
+            $JsonQuery.Name = $Name
+        }
+		if (-not [System.String]::IsNullOrEmpty($Description))
+        {
+            $JsonQuery.Comment = $Description
         }
 
 		# Build Json query
