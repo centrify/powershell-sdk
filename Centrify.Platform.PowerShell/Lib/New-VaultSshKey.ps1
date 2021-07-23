@@ -23,11 +23,18 @@ Mandatory parameter to specify the Name of the SSH key to create
 .PARAMETER PrivateKey
 Mandatory parameter to specify the private key to store in PEM format
 
+.PARAMETER Description
+Optional parameter to specify the Name of the SSH key to create
+
 .PARAMETER PrivateKey
 Optional parameter to specify the key passphrase
 
 .EXAMPLE
-C:\PS>  New-VaultSshKey -Name "root@server123" -PrivateKey C:\Users\Spandey\Desktop\sshkey@30.pem 
+C:\PS>  New-VaultSshKey -Name "root@server123" -PrivateKey ..\sshkey@30.pem 
+This CMDlet store a new SSH key name "root@server123" to the vault
+
+.EXAMPLE
+C:\PS>  New-VaultSshKey -Name "instance-key-vpc" -PrivateKey ..\aws_key.pem -Description "AWS Key" 
 This CMDlet store a new SSH key name "root@server123" to the vault
 #>
 function global:New-VaultSshKey
@@ -40,6 +47,9 @@ function global:New-VaultSshKey
 		[Parameter(Mandatory = $true, HelpMessage = "Specify the path to the private key in PEM format.")]
 		[System.String]$PrivateKey,
 
+		[Parameter(Mandatory = $true, HelpMessage = "Specify the private key Description.")]
+		[System.String]$Description,
+		
 		[Parameter(Mandatory = $false, HelpMessage = "Specify the private key passphrase.")]
 		[System.String]$Passphrase
 	)
@@ -85,6 +95,10 @@ function global:New-VaultSshKey
     	$JsonQuery.PrivateKey = $RawKey
     	$JsonQuery.Type       = "Manual"
 
+		if (-not [System.String]::IsNullOrEmpty($Description))
+        {
+            $JsonQuery.Comment = $Description
+        }
 		if (-not [System.String]::IsNullOrEmpty($Passphrase))
         {
             $JsonQuery.Passphrase = $Passphrase
