@@ -34,14 +34,14 @@ function global:Set-VaultSshKey
 {
 	param
 	(
-		[Parameter(Mandatory = $true, HelpMessage = "Specify the private key Name.")]
+		[Parameter(Mandatory = $true, HelpMessage = "Specify the ID of the SSH Key to update.")]
+		[System.String]$Id,
+        
+        [Parameter(Mandatory = $false, HelpMessage = "Specify the new Name for the SSH Key to update.")]
 		[System.String]$Name,
 
-		[Parameter(Mandatory = $true, HelpMessage = "Specify the path to the private key in PEM format.")]
-		[System.String]$PrivateKey,
-
-		[Parameter(Mandatory = $false, HelpMessage = "Specify the private key passphrase.")]
-		[System.String]$Passphrase
+		[Parameter(Mandatory = $false, HelpMessage = "Specify the Description for the SSH Key to update.")]
+		[System.String]$Description
 	)
 	
 	# Debug preference
