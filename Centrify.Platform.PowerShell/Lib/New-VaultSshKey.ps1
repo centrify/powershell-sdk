@@ -47,7 +47,7 @@ function global:New-VaultSshKey
 		[Parameter(Mandatory = $true, HelpMessage = "Specify the path to the private key in PEM format.")]
 		[System.String]$PrivateKey,
 
-		[Parameter(Mandatory = $true, HelpMessage = "Specify the private key Description.")]
+		[Parameter(Mandatory = $false, HelpMessage = "Specify the private key Description.")]
 		[System.String]$Description,
 		
 		[Parameter(Mandatory = $false, HelpMessage = "Specify the private key passphrase.")]
