@@ -15,32 +15,23 @@ function Centrify.Platform.PowerShell.Redrock.CreateQuery
 	param
 	(
 		[Parameter(Mandatory = $false, HelpMessage = "Specify the Query to use for the RedRock Query.")]
-		[System.String]$Query,
-
-		[Parameter(Mandatory = $false, HelpMessage = "Specify the Arguments to use for the RedRock Query.")]
-		[System.Collections.Hashtable]$Arguments
+		[System.String]$Query
 	)
 
 	try
 	{
-		# Get antixss value from Cookies
-		$CookieUri = ("https://{0}" -f $PlatformConnection.PodFqdn)
-		$antixss = ($PlatformConnection.Session.Cookies.GetCookies($CookieUri) | Where-Object { $_.Name -eq "antixss" }).Value
-
-        # Build Uri value from PASConnection variable including antixss value
-		$Uri = ("https://{0}/RedRock/query?antixss={1}" -f $PlatformConnection.PodFqdn, $antixss)
-
+		# Build Uri value from PlatformConnection variable
+		$Uri = ("https://{0}/RedRock/Query" -f $PlatformConnection.PodFqdn)
+		
 		# Create RedrockQuery
 		$RedrockQuery = @{}
 		$RedrockQuery.Uri			= $Uri
 		$RedrockQuery.ContentType	= "application/json"
 		$RedrockQuery.Header 		= @{ "X-CENTRIFY-NATIVE-CLIENT" = "1"; }
-		#$RedrockQuery.Header 		= $PlatformConnection.Session.Headers
 
 		# Build the JsonQuery string and add it to the RedrockQuery
 		$JsonQuery = @{}
 		$JsonQuery.Script 	= $Query
-		$JsonQuery.Args 	= $Arguments
 
 		$RedrockQuery.Json 	= $JsonQuery | ConvertTo-Json
 		
@@ -68,7 +59,7 @@ function Centrify.Platform.PowerShell.Redrock.GetQueryFromFile
 		Get-Content -Path ("{0}\Redrock\{1}.sql" -f $PSScriptRoot, $Name) | ForEach-Object {
 			$RedrockQuery += $_
 		}
-		# Return CipQuery object
+		# Return Redrock query
 		return $RedrockQuery
 	}
 	catch
