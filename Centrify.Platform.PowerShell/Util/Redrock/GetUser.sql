@@ -1,1 +1,25 @@
-SELECT * FROM User
+SELECT
+ User.CloudState,
+ User.DirectoryServiceUuid,
+ User.DisplayName,
+ User.Email,
+ User.Forest,
+ User.ID,
+ User.LastInvite,
+ User.LastLogin,
+ User.PhonePinLastChangeDate,
+ User.SearchEmail,
+ User.SecurityQuestionCount,
+ User.SecurityQuestionSet,
+ User.ServiceUser,
+ User.SourceDs,
+ User.SourceDsInstance,
+ User.SourceDsLocalized,
+ User.SourceDsType,
+ User.Status,
+ User.StatusEnum,
+ User.Username,
+ User.UserType
+ 
+FROM
+ User

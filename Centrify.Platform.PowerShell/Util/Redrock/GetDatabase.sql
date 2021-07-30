@@ -1,1 +1,32 @@
-SELECT * FROM VaultDatabase
+SELECT
+ VaultDatabase.AllowHealthCheck,
+ VaultDatabase.AllowMultipleCheckouts,
+ VaultDatabase.AllowPasswordHistoryCleanUp,
+ VaultDatabase.AllowPasswordRotation,
+ VaultDatabase.AllowPasswordRotationAfterCheckin,
+ VaultDatabase.DatabaseClass,
+ VaultDatabase.DefaultCheckoutTime,
+ VaultDatabase.Description,
+ VaultDatabase.FQDN,
+ VaultDatabase.HealthCheckInterval,
+ VaultDatabase.HealthStatus,
+ VaultDatabase.HealthStatusError,
+ VaultDatabase.ID,
+ VaultDatabase.InstanceName,
+ VaultDatabase.IPAddress,
+ VaultDatabase.LastHealthCheck,
+ VaultDatabase.LastState,
+ VaultDatabase.MinimumPasswordAge,
+ VaultDatabase.Name,
+ VaultDatabase.PasswordHistoryCleanUpDuration,
+ VaultDatabase.PasswordProfileID,
+ VaultDatabase.PasswordRotateDuration,
+ VaultDatabase.PasswordRotateInterval,
+ VaultDatabase.Port,
+ VaultDatabase.ProxyCollectionList,
+ VaultDatabase.Reachable,
+ VaultDatabase.ReachableError,
+ VaultDatabase.ServiceName
+ 
+FROM
+ VaultDatabase
