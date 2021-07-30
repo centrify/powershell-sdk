@@ -12,15 +12,13 @@
 
 <#
 .SYNOPSIS
-This CMDlet retrieves detailed information of the registered PASApplication on the system.
+This CMDlet retrieves detailed information of the registered CentrifyApplication on the system.
 
 .DESCRIPTION
 This CMDlet retrieves detailed information of the registered applications on the systems. 
-Cmdlet supports optional -Filter param which search in the following fields for matching strings:
-"Name", "AppTypeDisplayName", "Description", "State"
 
-.PARAMETER Filter
-Optional [String] Filter parameter used to query based on system name.
+.PARAMETER Name
+Optional [String] Name parameter used to query based on App name.
 
 .INPUTS
 This CmdLet accepts following optional parameters: [String] Filter
@@ -33,19 +31,15 @@ C:\PS> Get-CentrifyApplication
 This will output all applications on systems.
 
 .EXAMPLE
-C:\PS> Get-CentrifyApplication -Filter "OAuth"
-This will attempt to provide output of all the objects which have specified filter in it's searched fields.
-
-.EXAMPLE
-C:\PS> Get-CentrifyApplication -Filter "Active"
-This will attempt to provide output of all objects which have specified filter in it's searched fields.
+C:\PS> Get-CentrifyApplication -Filter "OAuth Client"
+This will return the App "OAuth Client" if it exists.
 #>
 function global:Get-CentrifyApplication
 {
 	param
 	(
-		[Parameter(Mandatory = $false, HelpMessage = "Specify the Filter to use to search for App(s).")]
-		[System.String]$Filter
+		[Parameter(Mandatory = $false, HelpMessage = "Specify the Name of the Application.")]
+		[System.String]$Name
 	)
 	
 	# Debug preference
@@ -65,29 +59,18 @@ function global:Get-CentrifyApplication
 		# Get current connection to the Centrify Platform
 		$PlatformConnection = Centrify.Platform.PowerShell.Core.GetPlatformConnection
 
-		# Set RedrockQuery
+		# Get built-in RedrockQuery
 		$Query = Centrify.Platform.PowerShell.Redrock.GetQueryFromFile -Name "GetApplication"
-
+		
 		# Set Arguments
-		$Arguments = @{}
-		$Arguments.PageNumber 	= 1
-		$Arguments.PageSize 	= 10000
-		$Arguments.Limit	 	= 10000
-		$Arguments.SortBy	 	= ""
-		$Arguments.Direction 	= "False"
-		$Arguments.Caching	 	= -1
-		
-		if (-not [System.String]::IsNullOrEmpty($Filter))
+		if (-not [System.String]::IsNullOrEmpty($Name))
 		{
-			# Add Filter to Arguments
-			$Arguments.FilterBy 	= ("Name", "AppTypeDisplayName", "Description", "State")
-			$Arguments.FilterValue	= $Filter
-			$Arguments.FilterQuery	= "null"
-			$Arguments.Caching		= 0
+			# Add Arguments to Statement
+			$Query = ("{0} WHERE Name='{1}'" -f $Query, $Name)
 		}
-		
+
 		# Build Query
-		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query -Arguments $Arguments
+		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query
 
 		# Debug informations
 		Write-Debug ("Uri= {0}" -f $RedrockQuery.Uri)

@@ -1,4 +1,1 @@
-SELECT
- * 
-FROM
- DataVault
+SELECT * FROM DataVault

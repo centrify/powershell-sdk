@@ -12,43 +12,35 @@
 
 <#
 .SYNOPSIS
-This Cmdlet retrieves important information about PASUser(s) on the system.
+This Cmdlet retrieves important information about CentrifyUser(s) on the system.
 
 .DESCRIPTION
-This Cmdlet retrieves important information about PASUser(s) on the system. 
+This Cmdlet retrieves important information about CentrifyUser(s) on the system. 
 Output can be filtered using -Filter parameter which searches for patterns across: "Username", "DisplayName", "Email", "Status", "LastInvite", and "LastLogin" fields.
 
-.PARAMETER Filter
-Optional [String] filter parameter to query on. Search for match will include the following attributes: "Username", "DisplayName", "Email", "Status", "LastInvite", "LastLogin"
+.PARAMETER Name
+Optional [String] Specify the User by its Centrify Directory Username.
 
 .INPUTS
-This CmdLet takes the following optional parameters: [String] Filter
+None
 
 .OUTPUTS
-This Cmdlet retrieves important information about PASUser(s) on the system.
+[CentrifyUser]
 
 .EXAMPLE
 C:\PS> Get-CentrifyUser 
-Outputs all PASUser objects on system
+Outputs all CentrifyUser objects on system
 
 .EXAMPLE
-C:\PS> Get-CentrifyUser | Select-Object -Property DisplayName, Status, LastLogin
-Output all objects showing only properties of DisplayName, Status, LastLogin
-
-.EXAMPLE
-C:\PS> Get-CentrifyUser -Filter "admin"
-Ouput objects that meet criteria with "admin" in searched fields
-
-.EXAMPLE
-C:\PS> Get-CentrifyUser -Filter "08/30/2018"
-Output objects that meet criteria with "08/30/2018" such as LastLogin
+C:\PS> Get-CentrifyUser -Username "john.doe@domain.name"
+Return user with username "john.doe@domain.name"
 #>
 function global:Get-CentrifyUser
 {
 	param
 	(
-		[Parameter(Mandatory = $false, HelpMessage = "Specify the Filter to use to search for User(s).")]
-		[System.String]$Filter,
+		[Parameter(Mandatory = $false, HelpMessage = "Specify the User by its Centrify Directory Username.")]
+		[System.String]$Username,
 
 		[Parameter(Mandatory = $false, HelpMessage = "Show details.")]
 		[Switch]$Detailed
@@ -71,28 +63,18 @@ function global:Get-CentrifyUser
 		# Get current connection to the Centrify Platform
 		$PlatformConnection = Centrify.Platform.PowerShell.Core.GetPlatformConnection
 
-		# Set RedrockQuery
+		# Get built-in RedrockQuery
 		$Query = Centrify.Platform.PowerShell.Redrock.GetQueryFromFile -Name "GetUser"
 		
 		# Set Arguments
-		$Arguments = @{}
-		$Arguments.PageNumber 	= 1
-		$Arguments.PageSize 	= 10000
-		$Arguments.Limit	 	= 10000
-		$Arguments.SortBy	 	= ""
-		$Arguments.Direction 	= "False"
-		$Arguments.Caching	 	= -1
-		
-		if (-not [System.String]::IsNullOrEmpty($Filter))
+		if (-not [System.String]::IsNullOrEmpty($Username))
 		{
-			# Add Filter to Arguments
-			$Arguments.FilterBy 	= ("Username", "DisplayName", "Email", "Status", "LastInvite", "LastLogin")
-			$Arguments.FilterValue 	= $Filter
-			$Arguments.FilterQuery 	= ""
-			$Arguments.Caching	 	= 0
+			# Add Arguments to Statement
+			$Query = ("{0} WHERE Username='{1}'" -f $Query, $Username)
 		}
+
 		# Build Query
-		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query -Arguments $Arguments
+		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query
 
 		# Debug informations
 		Write-Debug ("Uri= {0}" -f $RedrockQuery.Uri)

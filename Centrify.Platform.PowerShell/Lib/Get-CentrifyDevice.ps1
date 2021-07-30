@@ -15,12 +15,10 @@
 This CMDlet retrieves important PASEndpoint infrom from the system.
 
 .DESCRIPTION
-This CMDlet retrieves important PASEndpoint infrom from the system. Optional -Filter parameter supports searches across fields: 
-"Name", "Serial", "ModelName", "DisplayModelName", "OSVersion", "Owner", "Carrier", "PhoneNumber", "DisplayState"
+This CMDlet retrieves important PASEndpoint infrom from the system.
 
-.PARAMETER Filter
-Optional [String] Filter parameter searches across fields: 
-"Name", "Serial", "ModelName", "DisplayModelName", "OSVersion", "Owner", "Carrier", "PhoneNumber", "DisplayState"
+.PARAMETER Name
+Optional [String] Name parameter searches device by name
 
 .INPUTS
 CmdLet takes as input optional parameters: [String] Filter
@@ -29,19 +27,19 @@ CmdLet takes as input optional parameters: [String] Filter
 This CmdLet returns result details upon success. Returns error message upon failure.
 
 .EXAMPLE
-C:\PS> Get-CentrifyDevice.ps1 
-Retrieves all registered PASEndpoint 
+C:\PS> Get-CentrifyDevice
+Retrieves all registered CentrifyDevice
 
 .EXAMPLE
-C:\PS> Get-CentrifyDevice.ps1 -Filter "iOS"
-Retrieves all registered PASEndpoint with specified filter
+C:\PS> Get-CentrifyDevice -Name ""
+Retrieves device named 
 #>
 function global:Get-CentrifyDevice
 {
 	param
 	(
-		[Parameter(Mandatory = $false, HelpMessage = "Specify the Filter to use to search for Endpoint(s).")]
-		[System.String]$Filter
+		[Parameter(Mandatory = $false, HelpMessage = "Specify the device by name.")]
+		[System.String]$Name
 	)
 	
 	# Debug preference
@@ -61,29 +59,18 @@ function global:Get-CentrifyDevice
 		# Get current connection to the Centrify Platform
 		$PlatformConnection = Centrify.Platform.PowerShell.Core.GetPlatformConnection
 
-		# Set RedrockQuery
-		$Query = "SELECT * FROM Device ORDER BY Owner COLLATE NOCASE"
-
+		# Get built-in RedrockQuery
+		$Query = Centrify.Platform.PowerShell.Redrock.GetQueryFromFile -Name "GetDevice"
+		
 		# Set Arguments
-		$Arguments = @{}
-		$Arguments.PageNumber 	= 1
-		$Arguments.PageSize 	= 10000
-		$Arguments.Limit	 	= 10000
-		$Arguments.SortBy	 	= ""
-		$Arguments.Direction 	= "False"
-		$Arguments.Caching	 	= -1
-		
-		if (-not [System.String]::IsNullOrEmpty($Filter))
+		if (-not [System.String]::IsNullOrEmpty($Name))
 		{
-			# Add Filter to Arguments
-			$Arguments.FilterBy 	= ("Name", "Serial", "ModelName", "DisplayModelName", "OSVersion", "Owner", "Carrier", "PhoneNumber", "DisplayState")
-			$Arguments.FilterValue	= $Filter
-			$Arguments.FilterQuery	= "null"
-			$Arguments.Caching		= 0
+			# Add Arguments to Statement
+			$Query = ("{0} WHERE Name='{1}'" -f $Query, $Name)
 		}
-		
+
 		# Build Query
-		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query -Arguments $Arguments
+		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query
 
 		# Debug informations
 		Write-Debug ("Uri= {0}" -f $RedrockQuery.Uri)

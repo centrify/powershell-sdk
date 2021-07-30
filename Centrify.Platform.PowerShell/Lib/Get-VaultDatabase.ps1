@@ -63,29 +63,18 @@ function global:Get-VaultDatabase
 		# Get current connection to the Centrify Platform
 		$PlatformConnection = Centrify.Platform.PowerShell.Core.GetPlatformConnection
 
-		# Set RedrockQuery
+		# Get built-in RedrockQuery
 		$Query = Centrify.Platform.PowerShell.Redrock.GetQueryFromFile -Name "GetDatabase"
 		
 		# Set Arguments
-		$Arguments = @{}
-		$Arguments.PageNumber 	= 1
-		$Arguments.PageSize 	= 10000
-		$Arguments.Limit	 	= 10000
-		$Arguments.SortBy	 	= ""
-		$Arguments.Direction 	= "False"
-		$Arguments.Caching	 	= -1
-		
 		if (-not [System.String]::IsNullOrEmpty($Name))
 		{
-			# Add Filter to Arguments
-			$Arguments.FilterBy 	= ("Name", "FQDN")
-			$Arguments.FilterValue	= $Name
-			$Arguments.FilterQuery	= "null"
-			$Arguments.Caching		= 0
+			# Add Arguments to Statement
+			$Query = ("{0} WHERE Name='{1}'" -f $Query, $Name)
 		}
 
 		# Build Query
-		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query -Arguments $Arguments
+		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query
 
 		# Debug informations
 		Write-Debug ("Uri= {0}" -f $RedrockQuery.Uri)

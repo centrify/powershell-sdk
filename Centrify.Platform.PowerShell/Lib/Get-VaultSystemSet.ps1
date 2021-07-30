@@ -63,20 +63,10 @@ function global:Get-VaultSystemSet
 		$ContentType = "application/json" 
 		$Header = @{ "X-CENTRIFY-NATIVE-CLIENT" = "1" }
 
-		# Set Arguments
-		$Arguments = @{}
-		$Arguments.PageNumber 	= 1
-		$Arguments.PageSize 	= 10000
-		$Arguments.Limit	 	= 10000
-		$Arguments.SortBy	 	= ""
-		$Arguments.Direction 	= "False"
-		$Arguments.Caching	 	= -1
-
 		# Format Json query
 		$JsonQuery = @{}
 		$JsonQuery.NoBuiltins	= "True"
 		$JsonQuery.ObjectType	= "Server"
-		$JsonQuery.Args			= $Arguments
 		
 		$Json = $JsonQuery | ConvertTo-Json
 		

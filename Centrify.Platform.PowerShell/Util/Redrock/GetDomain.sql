@@ -1,4 +1,1 @@
-Select
- * 
-FROM
- VaultDomain
+SELECT * FROM VaultDomain

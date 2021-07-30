@@ -72,42 +72,18 @@ function global:Get-VaultSecret
 		# Get current connection to the Centrify Platform
 		$PlatformConnection = Centrify.Platform.PowerShell.Core.GetPlatformConnection
 
-		# Set RedrockQuery
-		$BaseQuery = Centrify.Platform.PowerShell.Redrock.GetQueryFromFile -Name "GetSecret"
+		# Get built-in RedrockQuery
+		$Query = Centrify.Platform.PowerShell.Redrock.GetQueryFromFile -Name "GetSecret"
 		
 		# Set Arguments
-		$Arguments = @{}
-		$Arguments.PageNumber 	= 1
-		$Arguments.PageSize 	= 10000
-		$Arguments.Limit	 	= 10000
-		$Arguments.SortBy	 	= ""
-		$Arguments.Direction 	= "False"
-		$Arguments.Caching	 	= -1
-		
-        # Add Filter
-		if (-not [System.String]::IsNullOrEmpty($Filter))
+		if (-not [System.String]::IsNullOrEmpty($Name))
 		{
-			# Add Filter to Arguments
-			$Arguments.FilterBy 	= ("SecretName", "Type", "SecretFileName")
-			$Arguments.FilterValue 	= $Filter
-			$Arguments.FilterQuery 	= ""
-			$Arguments.Caching	 	= 0
-		}
-
-		# Name not specified
-		if ([System.String]::IsNullOrEmpty($Name))
-		{
-			# No secret Name given, return ALL Secrets from all Folders
-			$Query = ("{0} ORDER BY SecretName COLLATE NOCASE" -f $BaseQuery)
-		}
-		else
-		{
-			# Get User from ALL Resources
-			$Query = ("{0} WHERE DataVault.SecretName = '{1}'" -f $BaseQuery, $Name)
+			# Add Arguments to Statement
+			$Query = ("{0} WHERE SecretName='{1}'" -f $Query, $Name)
 		}
 
 		# Build Query
-		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query -Arguments $Arguments
+		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query
 
 		# Debug informations
 		Write-Debug ("Uri= {0}" -f $RedrockQuery.Uri)

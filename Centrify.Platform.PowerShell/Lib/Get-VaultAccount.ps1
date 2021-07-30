@@ -96,30 +96,20 @@ function global:Get-VaultAccount
 		# Get Local Account
 		try
 		{	
-			# Set Arguments
-			$Arguments = @{}
-			$Arguments.PageNumber 	= 1
-			$Arguments.PageSize 	= 10000
-			$Arguments.Limit	 	= 10000
-			$Arguments.SortBy	 	= ""
-			$Arguments.Direction 	= "False"
-			$Arguments.Caching	 	= -1
-	
 			# Setup variable for the RedRock Query
 			$BaseQuery = Centrify.Platform.PowerShell.Redrock.GetQueryFromFile -Name "GetVaultAccount"
 			
 			if ($VaultSystem -eq "*")
 			{
 				# Resource not specified
-				if ([System.String]::IsNullOrEmpty($User))
-				{
-					# No Username given, return ALL acounts from ALL Resources
-					$Query = ("{0} ORDER BY User COLLATE NOCASE" -f $BaseQuery)
-				}
-				else
+				if (-not [System.String]::IsNullOrEmpty($User))
 				{
 					# Get User from ALL Resources
 					$Query = ("{0} WHERE VaultAccount.User ='{1}'" -f $BaseQuery, $User)
+				}
+				else
+				{
+					$Query = $BaseQuery
 				}
 			}			
 			else
@@ -128,7 +118,7 @@ function global:Get-VaultAccount
 				if ([System.String]::IsNullOrEmpty($User))
 				{
 					# No Username given, return ALL acounts for this Resource
-					$Query = ("{0} WHERE VaultAccount.Host = '{1}' ORDER BY User COLLATE NOCASE" -f $BaseQuery, $VaultSystem.ID)
+					$Query = ("{0} WHERE VaultAccount.Host = '{1}'" -f $BaseQuery, $VaultSystem.ID)
 				}
 				else
 				{
@@ -138,7 +128,7 @@ function global:Get-VaultAccount
 			}
 
 			# Build Query
-			$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query -Arguments $Arguments
+			$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query
 	
 			# Debug informations
 			Write-Debug ("Uri= {0}" -f $RedrockQuery.Uri)
@@ -185,39 +175,37 @@ function global:Get-VaultAccount
 	
 			# Set RedrockQuery
 			$BaseQuery = Centrify.Platform.PowerShell.Redrock.GetQueryFromFile -Name "GetDomainAccount"
-			
-			# Set Arguments
-			$Arguments = @{}
-			$Arguments.PageNumber 	= 1
-			$Arguments.PageSize 	= 10000
-			$Arguments.Limit	 	= 10000
-			$Arguments.SortBy	 	= ""
-			$Arguments.Direction 	= "False"
-			$Arguments.Caching	 	= -1
-			
-			# Add filters
-			if (-not [System.String]::IsNullOrEmpty($User))
-			{
-				# Add Filter to Arguments
-				$Arguments.FilterBy 	= ("User", "")
-				$Arguments.FilterValue	= $User
-				$Arguments.FilterQuery	= "null"
-				$Arguments.Caching		= 0
-			}
-
+	
 			if ($VaultDomain -eq "*")
 			{
-				# Get acount(s) for ALL Domains
-				$Query = ("{0} ORDER BY User COLLATE NOCASE" -f $BaseQuery)
-			}
+				# Domain not specified
+				if (-not [System.String]::IsNullOrEmpty($User))
+				{
+					# Get User from ALL Domains
+					$Query = ("{0} WHERE VaultAccount.User ='{1}'" -f $BaseQuery, $User)
+				}
+				else
+				{
+					$Query = $BaseQuery
+				}
+			}			
 			else
 			{
-				# Get acount(s) for specified PASDomain
-				$Query = ("{0} WHERE VaultDomain.ID ='{1}' ORDER BY User COLLATE NOCASE" -f $BaseQuery, $VaultDomain.ID)
+				# Domain is specified
+				if ([System.String]::IsNullOrEmpty($User))
+				{
+					# No Username given, return ALL acounts for this Domain
+					$Query = ("{0} WHERE VaultDomain.ID = '{1}'" -f $BaseQuery, $VaultDomain.ID)
+				}
+				else
+				{
+					# Get User from this Resource
+					$Query = ("{0} WHERE VaultDomain.ID = '{1}' AND VaultAccount.User = '{2}'" -f $BaseQuery, $VaultDomain.ID, $User)
+				}
 			}
-				
+
 			# Build Query
-			$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query -Arguments $Arguments
+			$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query
 	
 			# Debug informations
 			Write-Debug ("Uri= {0}" -f $RedrockQuery.Uri)
@@ -232,7 +220,7 @@ function global:Get-VaultAccount
                 $VaultAccounts = $WebResponseResult.Result.Results.Row
             
                 # Only modify results if not empty
-                if ($VaultAccounts -ne [Void]$null)
+                if ($VaultAccounts -ne [Void]$null -and $Detailed.IsPresent)
                 {
                     # Modify results
                     $VaultAccounts | ForEach-Object {
@@ -270,15 +258,14 @@ function global:Get-VaultAccount
 			# Add filters
 			if ($VaultDatabase -eq "*")
 			{
-				if ([System.String]::IsNullOrEmpty($User))
-				{
-					# No Username given, return ALL acounts from ALL Databases
-					$Query = ("{0} ORDER BY User COLLATE NOCASE" -f $BaseQuery)
-				}
-				else
+				if (-not [System.String]::IsNullOrEmpty($User))
 				{
 					# Get User from ALL Databases
 					$Query = ("{0} WHERE VaultAccount.User ='{1}'" -f $BaseQuery, $User)
+				}
+				else
+				{
+					$Query = $BaseQuery
 				}
 			}
 			else
@@ -286,7 +273,7 @@ function global:Get-VaultAccount
 				if ([System.String]::IsNullOrEmpty($User))
 				{
 					# No Username given, return ALL acounts for this Database
-					$Query = ("{0} WHERE VaultDatabase.ID ='{1}' ORDER BY User COLLATE NOCASE" -f $BaseQuery, $VaultDatabase.ID)
+					$Query = ("{0} WHERE VaultDatabase.ID ='{1}'" -f $BaseQuery, $VaultDatabase.ID)
 				}
 				else
 				{
@@ -295,17 +282,8 @@ function global:Get-VaultAccount
 				}
 			}
 
-			# Set Arguments
-			$Arguments = @{}
-			$Arguments.PageNumber 	= 1
-			$Arguments.PageSize 	= 10000
-			$Arguments.Limit	 	= 10000
-			$Arguments.SortBy	 	= ""
-			$Arguments.Direction 	= "False"
-			$Arguments.Caching	 	= -1
-			
 			# Build Query
-			$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query -Arguments $Arguments
+			$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query
 	
 			# Debug informations
 			Write-Debug ("Uri= {0}" -f $RedrockQuery.Uri)
@@ -320,7 +298,7 @@ function global:Get-VaultAccount
                 $VaultAccounts = $WebResponseResult.Result.Results.Row
             
                 # Only modify results if not empty
-                if ($VaultAccounts -ne [Void]$null)
+                if ($VaultAccounts -ne [Void]$null -and $Detailed.IsPresent)
                 {
                     # Modify results
                     $VaultAccounts | ForEach-Object {

@@ -1,4 +1,1 @@
-SELECT
- *
-FROM
- Server
+SELECT * FROM Server

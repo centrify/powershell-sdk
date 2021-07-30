@@ -64,32 +64,18 @@ function global:Get-CentrifyRole
 		# Get current connection to the Centrify Platform
 		$PlatformConnection = Centrify.Platform.PowerShell.Core.GetPlatformConnection
 
-		# Setup variable for the RedRock Query
-		$BaseQuery = Centrify.Platform.PowerShell.Redrock.GetQueryFromFile -Name "GetRole"
-
-		# Set RedrockQuery
-		if ([System.String]::IsNullOrEmpty($Name))
-		{
-			# No Name given, return ALL Roles
-    		$Query = ("{0} ORDER BY Name COLLATE NOCASE" -f $BaseQuery)
-		}
-		else
-		{
-			# Get Role by name
-			$Query = ("{0} WHERE Name ='{1}'" -f $BaseQuery, $Name)
-		}
-
-		# Set Arguments
-		$Arguments = @{}
-		$Arguments.PageNumber 	= 1
-		$Arguments.PageSize 	= 10000
-		$Arguments.Limit	 	= 10000
-		$Arguments.SortBy	 	= ""
-		$Arguments.Direction 	= "False"
-		$Arguments.Caching	 	= -1
+		# Get built-in RedrockQuery
+		$Query = Centrify.Platform.PowerShell.Redrock.GetQueryFromFile -Name "GetRole"
 		
+		# Set Arguments
+		if (-not [System.String]::IsNullOrEmpty($Name))
+		{
+			# Add Arguments to Statement
+			$Query = ("{0} WHERE Name='{1}'" -f $Query, $Name)
+		}
+
 		# Build Query
-		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query -Arguments $Arguments
+		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query
 
 		# Debug informations
 		Write-Debug ("Uri= {0}" -f $RedrockQuery.Uri)
@@ -101,16 +87,7 @@ function global:Get-CentrifyRole
 		if ($WebResponseResult.Success)
 		{
 			# Get raw data
-			if ([System.String]::IsNullOrEmpty($Name))
-            {
-                # Get all results
-                $CentrifyRoles = $WebResponseResult.Result.Results.Row
-            }
-            else
-            {
-                # Get only matches from filtered results
-			    $CentrifyRoles = $WebResponseResult.Result.Results.Row | Where-Object { $_.Name -eq $Name }
-            }
+            $CentrifyRoles = $WebResponseResult.Result.Results.Row
             
             # Only modify results if not empty
             if ($CentrifyRoles -ne [Void]$null -and $Detailed.IsPresent)

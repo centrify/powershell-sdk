@@ -90,19 +90,9 @@ function global:Get-CentrifyEnrollmentCode
 		Write-Debug ("Uri= {0}" -f $Uri)
 		Write-Debug ("ContentType= {0}" -f $ContentType)
 
-		# Set Arguments
-		$Arguments = @{}
-		$Arguments.PageNumber 	= 1
-		$Arguments.PageSize 	= 10000
-		$Arguments.Limit	 	= 10000
-		$Arguments.SortBy	 	= ""
-		$Arguments.Direction 	= "False"
-		$Arguments.Caching	 	= -1
-		
 		# Format Json query
 		$JsonQuery = @{}
 		$JsonQuery.RRFormat	= "true"
-		$JsonQuery.Args		= $Arguments
 		
 		$Json = $JsonQuery | ConvertTo-Json 
 				

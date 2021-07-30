@@ -285,7 +285,6 @@ function Centrify.Platform.PowerShell.Core.DirectoryServiceQuery
 		$Header = @{ "X-CENTRIFY-NATIVE-CLIENT" = "1"; }
 
 		# Set Arguments
-		# Set Arguments
 		$Arguments = @{}
 		$Arguments.PageNumber 	= 1
 		$Arguments.PageSize 	= 10000
@@ -370,17 +369,8 @@ function Centrify.Platform.PowerShell.Core.GetUserActivity
 		# Set RedrockQuery
 		$Query = ("@/lib/get_user_activity_for_admin.js(userid:'{0}')" -f $ID)
 
-		# Set Arguments
-		$Arguments = @{}
-		$Arguments.PageNumber 	= 1
-		$Arguments.PageSize 	= 10000
-		$Arguments.Limit	 	= 10000
-		$Arguments.SortBy	 	= ""
-		$Arguments.Direction 	= "False"
-		$Arguments.Caching	 	= -1
-			
 		# Build Query
-		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query -Arguments $Arguments
+		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query
 	
 		# Debug informations
 		Write-Debug ("Uri= {0}" -f $RedrockQuery.Uri)
@@ -463,17 +453,8 @@ function Centrify.Platform.PowerShell.Core.GetSystemActivity
 		# Set RedrockQuery
 		$Query = ("@/lib/server/get_activity_for_server.js(id:'{0}')" -f $ID)
 
-		# Set Arguments
-		$Arguments = @{}
-		$Arguments.PageNumber 	= 1
-		$Arguments.PageSize 	= 10000
-		$Arguments.Limit	 	= 10000
-		$Arguments.SortBy	 	= ""
-		$Arguments.Direction 	= "False"
-		$Arguments.Caching	 	= -1
-			
 		# Build Query
-		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query -Arguments $Arguments
+		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query
 	
 		# Debug informations
 		Write-Debug ("Uri= {0}" -f $RedrockQuery.Uri)
@@ -556,17 +537,8 @@ function Centrify.Platform.PowerShell.Core.GetSecretActivity
 		# Set RedrockQuery
 		$Query = ("@/lib/server/get_activity_for_generic_secret.js(id:'{0}')" -f $ID)
 
-		# Set Arguments
-		$Arguments = @{}
-		$Arguments.PageNumber 	= 1
-		$Arguments.PageSize 	= 10000
-		$Arguments.Limit	 	= 10000
-		$Arguments.SortBy	 	= ""
-		$Arguments.Direction 	= "False"
-		$Arguments.Caching	 	= -1
-			
 		# Build Query
-		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query -Arguments $Arguments
+		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query
 	
 		# Debug informations
 		Write-Debug ("Uri= {0}" -f $RedrockQuery.Uri)
@@ -649,17 +621,8 @@ function Centrify.Platform.PowerShell.Core.GetDatabaseActivity
 		# Set RedrockQuery
 		$Query = ("@/lib/server/get_activity_for_database.js(id:'{0}')" -f $ID)
 
-		# Set Arguments
-		$Arguments = @{}
-		$Arguments.PageNumber 	= 1
-		$Arguments.PageSize 	= 10000
-		$Arguments.Limit	 	= 10000
-		$Arguments.SortBy	 	= ""
-		$Arguments.Direction 	= "False"
-		$Arguments.Caching	 	= -1
-			
 		# Build Query
-		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query -Arguments $Arguments
+		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query
 	
 		# Debug informations
 		Write-Debug ("Uri= {0}" -f $RedrockQuery.Uri)
@@ -742,17 +705,8 @@ function Centrify.Platform.PowerShell.Core.GetAccountActivity
 		# Set RedrockQuery
 		$Query = ("@/lib/server/get_activity_for_account.js(id:'{0}')" -f $ID)
 
-		# Set Arguments
-		$Arguments = @{}
-		$Arguments.PageNumber 	= 1
-		$Arguments.PageSize 	= 10000
-		$Arguments.Limit	 	= 10000
-		$Arguments.SortBy	 	= ""
-		$Arguments.Direction 	= "False"
-		$Arguments.Caching	 	= -1
-			
 		# Build Query
-		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query -Arguments $Arguments
+		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query
 	
 		# Debug informations
 		Write-Debug ("Uri= {0}" -f $RedrockQuery.Uri)
@@ -837,19 +791,9 @@ function Centrify.Platform.PowerShell.Core.GetRoleAdministrativeRights
 		$ContentType = "application/json" 
 		$Header = @{ "X-CENTRIFY-NATIVE-CLIENT" = "1" }
 
-		# Set Arguments
-		$Arguments = @{}
-		$Arguments.PageNumber 	= 1
-		$Arguments.PageSize 	= 10000
-		$Arguments.Limit	 	= 10000
-		$Arguments.SortBy	 	= ""
-		$Arguments.Direction 	= "False"
-		$Arguments.Caching	 	= -1
-
 		# Format Json query
 		$JsonQuery = @{}
 		$JsonQuery.Role	= $ID
-		$JsonQuery.Args	= $Arguments
 			
 		$Json = $JsonQuery | ConvertTo-Json
 			
@@ -965,17 +909,8 @@ function Centrify.Platform.PowerShell.Core.GetSshKeyActivity
 		# Set RedrockQuery
 		$Query = ("@/lib/server/get_activity_for_sshkeys.js(id:'{0}')" -f $ID)
 
-		# Set Arguments
-		$Arguments = @{}
-		$Arguments.PageNumber 	= 1
-		$Arguments.PageSize 	= 10000
-		$Arguments.Limit	 	= 10000
-		$Arguments.SortBy	 	= ""
-		$Arguments.Direction 	= "False"
-		$Arguments.Caching	 	= -1
-			
 		# Build Query
-		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query -Arguments $Arguments
+		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query
 	
 		# Debug informations
 		Write-Debug ("Uri= {0}" -f $RedrockQuery.Uri)

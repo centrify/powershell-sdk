@@ -1,4 +1,1 @@
-SELECT
- * 
-FROM
- SshKeys 
+SELECT * FROM SshKeys

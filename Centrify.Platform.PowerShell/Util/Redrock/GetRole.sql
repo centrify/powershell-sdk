@@ -1,4 +1,1 @@
-SELECT
- *
-FROM
- Role 
+SELECT * FROM Role

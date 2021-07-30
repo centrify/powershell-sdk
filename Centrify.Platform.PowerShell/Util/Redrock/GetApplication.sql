@@ -1,4 +1,1 @@
-SELECT
- * 
-FROM
- Application
+SELECT * FROM Application

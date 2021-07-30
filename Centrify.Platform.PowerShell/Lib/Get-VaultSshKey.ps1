@@ -76,42 +76,18 @@ function global:Get-VaultSshKey
 		# Get current connection to the Centrify Platform
 		$PlatformConnection = Centrify.Platform.PowerShell.Core.GetPlatformConnection
 
-		# Set RedrockQuery
-		$BaseQuery = Centrify.Platform.PowerShell.Redrock.GetQueryFromFile -Name "GetSshKey"
+		# Get built-in RedrockQuery
+		$Query = Centrify.Platform.PowerShell.Redrock.GetQueryFromFile -Name "GetSshKey"
 		
 		# Set Arguments
-		$Arguments = @{}
-		$Arguments.PageNumber 	= 1
-		$Arguments.PageSize 	= 10000
-		$Arguments.Limit	 	= 10000
-		$Arguments.SortBy	 	= ""
-		$Arguments.Direction 	= "False"
-		$Arguments.Caching	 	= -1
-		
-        # Add Filter
-		if (-not [System.String]::IsNullOrEmpty($Filter))
+		if (-not [System.String]::IsNullOrEmpty($Name))
 		{
-			# Add Filter to Arguments
-			$Arguments.FilterBy 	= ("Name", "KeyType", "KeyFormat")
-			$Arguments.FilterValue 	= $Filter
-			$Arguments.FilterQuery 	= ""
-			$Arguments.Caching	 	= 0
-		}
-
-		# Name not specified
-		if ([System.String]::IsNullOrEmpty($Name))
-		{
-			# No SSH Key Name given, return ALL SSH Keys from Vault
-			$Query = ("{0} ORDER BY Name COLLATE NOCASE" -f $BaseQuery)
-		}
-		else
-		{
-			# Get User from ALL Resources
-			$Query = ("{0} WHERE SshKeys.Name = '{1}'" -f $BaseQuery, $Name)
+			# Add Arguments to Statement
+			$Query = ("{0} WHERE Name='{1}'" -f $Query, $Name)
 		}
 
 		# Build Query
-		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query -Arguments $Arguments
+		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query
 
 		# Debug informations
 		Write-Debug ("Uri= {0}" -f $RedrockQuery.Uri)
