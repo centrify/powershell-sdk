@@ -63,7 +63,7 @@ SELECT
  VaultAccount.WorkflowApproversList,
  VaultAccount.WorkflowDefaultOptions,
  VaultAccount.WorkflowEnabled
-
+ 
 FROM
  VaultAccount
  

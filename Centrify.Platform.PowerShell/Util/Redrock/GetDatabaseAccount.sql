@@ -11,7 +11,6 @@ SELECT
  VaultDatabase.ID AS DatabaseID,
  VaultDatabase.Description AS DatabaseDescription,
  VaultDatabase.DatabaseClass,
- VaultDatabase.DiscoveredTime AS DatabaseDiscoveredTime,
  VaultAccount.DefaultCheckoutTime,
  VaultAccount.Description,
  VaultAccount.DeviceID,
@@ -62,10 +61,10 @@ SELECT
  VaultAccount.WorkflowApproversList,
  VaultAccount.WorkflowDefaultOptions,
  VaultAccount.WorkflowEnabled
-
+ 
 FROM
  VaultAccount
-
+ 
 JOIN
  VaultDatabase
  

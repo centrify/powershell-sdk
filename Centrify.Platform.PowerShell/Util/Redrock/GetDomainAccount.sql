@@ -61,12 +61,12 @@ SELECT
  VaultAccount.WorkflowApproversList,
  VaultAccount.WorkflowDefaultOptions,
  VaultAccount.WorkflowEnabled
-
+ 
 FROM
- VaultAccount
+ VaultDomain
  
 JOIN
- VaultDomain
+ VaultAccount
  
 ON
  VaultAccount.DomainID = VaultDomain.ID
