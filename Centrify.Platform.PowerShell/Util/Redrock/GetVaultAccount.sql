@@ -69,6 +69,6 @@ FROM
  
 JOIN
  Server
-
+ 
 ON
  VaultAccount.Host = Server.ID
