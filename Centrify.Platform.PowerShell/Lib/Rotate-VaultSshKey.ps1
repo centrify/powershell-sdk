@@ -12,21 +12,21 @@
 
 <#
 .SYNOPSIS
-This Cmdlet supports ability to rotate SSH Private Key for a given VaultSshKey.
+This Cmdlet supports ability to rotate SSH Private Key for a given managed VaultAccount.
 
 .DESCRIPTION
-This Cmdlet supports ability to rotate SSH Private Key for a given VaultSshKey.
+This Cmdlet supports ability to rotate SSH Private Key for a given managed VaultAccount.
 
-.PARAMETER VaultSshKey
-Mandatory VaultSshKey.
+.PARAMETER VaultAccount
+Mandatory VaultAccount. Note that account must be managed and set with SSH Key as credential type. 
 
 .INPUTS
-[VaultSshKey]
+[VaultAccount]
 
 .OUTPUTS
 
 .EXAMPLE
-C:\PS>  Rotate-VaultSshKey -VaultSshKey (Get-VaultSshKey -Name "root@server123") 
+C:\PS>  Rotate-VaultSshKey -VaultAccount (Get-VaultAccount -User "root" -VaultSystem (Get-VaultSystem -Name "server123")) 
 
 #>
 function global:Rotate-VaultSshKey
@@ -66,12 +66,19 @@ function global:Rotate-VaultSshKey
 		{
 			if ([System.String]::IsNullOrEmpty($VaultAccount.ID))
 			{
-				Throw "Cannot get PASAccount ID from given parameter."
+				Throw "Cannot get VaultAccount ID from given parameter."
 			}
 			else
 			{
-				# Get PASAccount ID
-				$JsonQuery.ID = $VaultAccount.ID
+				if ($VaultAccount.CredentialType -ne "SshKey" -and -not $VaultAccount.IsManaged)
+				{
+					Throw "VaultAccount credential must be managed and SSH Key type."
+				}
+				else
+				{
+					# Get PASAccount ID
+					$JsonQuery.ID = $VaultAccount.ID
+				}
 			}
 		}
 
