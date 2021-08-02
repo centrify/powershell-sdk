@@ -158,6 +158,11 @@ function global:Get-VaultAccount
                 # Return results
                 return $VaultAccounts
             }
+			else
+			{
+				# Query error
+				Throw $WebResponseResult.Message
+			}
 		}
 		catch
 		{
