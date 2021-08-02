@@ -104,5 +104,6 @@ SELECT
  Server.ZoneRoleWorkflowEnabled,
  Server.ZoneRoleWorkflowRoles,
  Server.ZoneStatus
+ 
 FROM
  Server
