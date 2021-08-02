@@ -43,7 +43,6 @@ SELECT
  VaultDomain.ZoneRoleCleanupIntervalHours,
  VaultDomain.ZoneRoleWorkflowApprovers,
  VaultDomain.ZoneRoleWorkflowApproversList,
- VaultDomain.ZoneRoleWorkflowDefaultOptions,
  VaultDomain.ZoneRoleWorkflowEnabled,
  VaultDomain.ZoneRoleWorkflowRoles
  
