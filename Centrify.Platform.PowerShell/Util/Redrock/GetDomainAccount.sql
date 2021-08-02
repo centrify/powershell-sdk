@@ -3,7 +3,6 @@ SELECT
  VaultAccount.ActiveCheckouts,
  VaultAccount.ActiveSessions,
  VaultDomain.AllowPasswordHistoryCleanUp,
- VaultAccount.ClientId,
  VaultAccount.CloudProviderId,
  VaultAccount.ComputerClass,
  VaultAccount.CredentialId,
