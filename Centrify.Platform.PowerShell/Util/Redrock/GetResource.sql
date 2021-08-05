@@ -74,7 +74,6 @@ SELECT
  Server.ReachableError,
  Server.Region,
  Server.RemoveUserOnSessionEnd,
- Server.Rights,
  Server.ServiceAccountID,
  Server.SessionType,
  Server.ShowCpsOnMobile,
