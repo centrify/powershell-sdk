@@ -108,11 +108,8 @@ function Centrify.Platform.PowerShell.Redrock.GetIDFromPrincipal
 			}
 		}
 		
-		# Set Arguments
-		$Arguments = @{}
-		
 		# Build Query
-		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query -Arguments $Arguments
+		$RedrockQuery = Centrify.Platform.PowerShell.Redrock.CreateQuery -Query $Query
 
 		# Debug informations
 		Write-Debug ("Uri= {0}" -f $RedrockQuery.Uri)
