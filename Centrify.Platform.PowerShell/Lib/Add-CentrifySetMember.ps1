@@ -162,7 +162,7 @@ function global:Add-CentrifySetMember
             
             # Set Json query
 		    $JsonQuery = @{}
-		    $JsonQuery.ID 	= $PASCollection.ID
+		    $JsonQuery.ID 	= $CentrifySet.ID
 		    $JsonQuery.Add	= @($Member)
 		}
 
