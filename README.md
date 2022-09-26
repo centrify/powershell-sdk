@@ -1,4 +1,11 @@
 # Centrify Platform PowerShell SDK
+
+# PUBLIC ARCHIVE
+
+> ***NOTE***
+> This repo is archived.
+> This is still available under the licensing terms, but is not being actively developed or updated any further. Please see [DelineaXPM](https://github.com/DelineaXPM) for active projects.
+
 This SDK is a PowerShell module for Centrify Platform. The module provides wrapper functions for the Centify Platform API as PowerShell Cmdlets that can be used from PowerShell scripts or from an interactive PS Session.
  
 ## Installation
